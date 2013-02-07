@@ -31,8 +31,8 @@ The URL and FORM scopes are merged together into a "request.parameters" Struct.
 PathInfo is a slash-delimited list of request parameters.
 
 * The first two items in PathInfo are the controller and view (in that order).
-** The request controller is stored in "request.controller".
-** The request view is stored in "request.view".
+* * The request controller is stored in "request.controller".
+* * The request view is stored in "request.view".
 * Any additional items in PathInfo are colon-delimited lists of variables and values (for example, variable:value). These are appended into the request parameters.
 
 
