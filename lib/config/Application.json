@@ -1,0 +1,5 @@
+{
+	"SITE_NAME" : "$SITE_NAME",
+	"DEFAULT_CONTROLLER" : "Main",
+	"DEFAULT_VIEW" : "Home"
+}
