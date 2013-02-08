@@ -10,6 +10,7 @@ Things to Do
 * Review the folder structure used by the object library service.
 * Add the option to parse wiki formatting automatically.
 * Add the ability for the service response to appropriately set the HTTP response codes based on its status.
+* Change the config service to auto-load any configuration file in the "/lib/config" directory.
 
 
 Request Process
@@ -50,6 +51,14 @@ If the Struct returned by the controller function contains a "title" or a "templ
 * By default, the application uses the "Default" template.
 
 
+Configuration
+-------------
+Configuration files are stored in the "/lib/config" directory.
+The files are formatted in JSON, with a *.json file extension.
+To reference a config setting, call "config.get( _setting_, _config (optional)_ )".
+By default, "config.get()" will reference the "Application" config (so you only need to specify a config if you are reading from an alternative config file).
+
+
 Object Caching
 --------------
 Any object found in either "/lib/com/model" or "/lib/com/service" will automatically be loaded into an appropriate ObjectFactory and cached in memory.
@@ -67,7 +76,7 @@ How the object is loaded can be configured as an attribute on the component.
 
 	A comma-delimited list of constructor arguments and their values. Arguments and values are colon-delimited (for example, "arg1:value1,arg2:value2").
 
-Objects can be retreived either by using "spatula.get( libraryName, classpath )", or by calling the object factory directly in memory (for example, "application.services.get( classpath )").
+Objects can be retreived either by using "spatula.get( _libraryName_, _classpath_ )", or by calling the object factory directly in memory (for example, "application.services.get( _classpath_ )").
 Using "spatula" is preferred, since it will hunt for the appropriate variable scope for you.
 
 
