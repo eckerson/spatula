@@ -6,10 +6,10 @@ A simple ColdFusion MVC framework.
 
 Things to Do
 ------------
-* [ ] Object Lazy-Loading.
-* [ ] Review the folder structure used by the object library service.
-* [ ] Add the option to parse wiki formatting automatically.
-* [ ] Add the ability for the service response to appropriately set the HTTP response codes based on its status.
+* Object Lazy-Loading.
+* Review the folder structure used by the object library service.
+* Add the option to parse wiki formatting automatically.
+* Add the ability for the service response to appropriately set the HTTP response codes based on its status.
 
 
 Request Process
@@ -55,12 +55,17 @@ Object Caching
 Any object found in either "/lib/com/model" or "/lib/com/service" will automatically be loaded into an appropriate ObjectFactory and cached in memory.
 How the object is loaded can be configured as an attribute on the component.
 
-;scope
-: The memory scope to cache the object into. Available scopes are: application (default), session, and request.
-;dependencies
-: A comma-delimited list of additional objects that are required to be loaded prior to loading the current one (for example, "Foo,bar.Jazz").
-;constructorArgs
-: A comma-delimited list of constructor arguments and their values. Arguments and values are colon-delimited (for example, "arg1:value1,arg2:value2").
+* *scope*
+
+	The memory scope to cache the object into. Available scopes are: application (default), session, and request.
+
+* *dependencies*
+
+	A comma-delimited list of additional objects that are required to be loaded prior to loading the current one (for example, "Foo,bar.Jazz").
+
+* *constructorArgs*
+
+	A comma-delimited list of constructor arguments and their values. Arguments and values are colon-delimited (for example, "arg1:value1,arg2:value2").
 
 Objects can be retreived either by using "spatula.get( libraryName, classpath )", or by calling the object factory directly in memory (for example, "application.services.get( classpath )").
 Using "spatula" is preferred, since it will hunt for the appropriate variable scope for you.
