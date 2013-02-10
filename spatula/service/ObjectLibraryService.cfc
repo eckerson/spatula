@@ -58,13 +58,14 @@ component
 
 	public void function createLibraryConfig(
 		required String libraries,
-		required String libraryDotPaths
+		required String libraryDotPaths,
+		Boolean useLazyLoadByDefault = true
 	)
 	{
 		application.libraryConfig = createObject(
 			"component",
 			"spatula.factory.LibraryConfigFactory"
-		).init();
+		).init( arguments.useLazyLoadByDefault );
 
 		application.libraryConfig.createLibraryConfig(
 			argumentCollection = arguments

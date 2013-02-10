@@ -5,7 +5,8 @@
 	//Create the library configurations
 	spatula.createLibraryConfig(
 		"services,models",
-		"lib.com.service,lib.com.model"
+		"lib.com.service,lib.com.model",
+		config.get( "DEFAULT_LAZY_LOAD" )
 	);
 
 	//Create the object factories

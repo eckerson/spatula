@@ -6,8 +6,8 @@ A simple ColdFusion MVC framework.
 
 Things to Do
 ------------
-* Object Lazy-Loading.
 * Review the folder structure used by the object library service.
+* Review setting organization.
 * Add the option to parse wiki formatting automatically.
 * Add the ability for the service response to appropriately set the HTTP response codes based on its status.
 
@@ -81,6 +81,10 @@ How the object is loaded can be configured as an attribute on the component.
 * *constructorArgs*
 
 	A comma-delimited list of constructor arguments and their values. Arguments and values are colon-delimited (for example, "arg1:value1,arg2:value2").
+
+* *lazyLoad*
+
+	Determines if the object should be cached when it's first requested ("true") or on application-start ("false"). The default for this setting is determined by the _DEFAULT_LAZY_LOAD_ setting.
 
 Objects can be retreived either by using "spatula.get( _libraryName_, _classpath_ )", or by calling the object factory directly in memory (for example, "application.services.get( _classpath_ )").
 Using "spatula" is preferred, since it will hunt for the appropriate variable scope for you.

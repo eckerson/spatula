@@ -7,13 +7,17 @@ component
 {
 	// Properties
 	property type="Struct" name="libraryConfig" setter=false;
+	property type="Boolean" name="useLazyLoadByDefault" setter=false;
 
 
 	// Constructors
-	public LibraryConfigFactory function init()
+	public LibraryConfigFactory function init(
+		Boolean useLazyLoadByDefault = true
+	)
 	{
 		//Set the default values for the properties
 		variables.libraryConfig = {};
+		variables.useLazyLoadByDefault = arguments.useLazyLoadByDefault;
 
 		//Return a reference to the initialized object
 		return this;
@@ -183,6 +187,7 @@ component
 			"classpath" = arguments.classpath,
 			"name" = listLast( arguments.classpath, "." ),
 			"scope" = "application",
+			"lazyLoad" = variables.useLazyLoadByDefault,
 			"dependencies" = [],
 			"constructorArgs" = {}
 		};
@@ -191,6 +196,12 @@ component
 		if ( structKeyExists( objectMetaData, "scope" ) )
 		{
 			config.scope = objectMetaData.scope;
+		}
+
+		if ( structKeyExists( objectMetaData, "lazyLoad" ) &&
+			isBoolean( objectMetaData.lazyLoad ) )
+		{
+			config.lazyLoad = objectMetaData.lazyLoad;
 		}
 
 		if  ( structKeyExists( objectMetaData, "dependencies" ) )

@@ -30,29 +30,39 @@ component
 		String classpath = ""
 	)
 	{
-		return variables.objects.get( arguments.classpath );
+		if ( isNull( variables.objects.get( arguments.classpath ) ) )
+		{
+			loadObject( classpath = arguments.classpath, useFullClasspath = false );
+		}
+
+		return variables.objects.get( classpath = arguments.classpath );
 	}
 
 	private void function loadObjects()
 	{
 		for ( var i = 1; i <= arrayLen( variables.config ); i++ )
 		{
-			loadObject(
-				variables.config[ i ].classpath,
-				variables.config[ i ]
-			);
+			if ( !variables.config[ i ].lazyLoad )
+			{
+				loadObject(
+					variables.config[ i ].classpath,
+					variables.config[ i ]
+				);
+			}
 		}
 	}
 
 	private void function loadObject(
 		required String classpath,
-		Struct config
+		Struct config,
+		Boolean useFullClasspath = true
 	)
 	{
 		if ( !structKeyExists( arguments, "config" ) )
 		{
 			arguments.config = getObjectConfigByClasspath(
-				arguments.classpath
+				arguments.classpath,
+				arguments.useFullClasspath
 			);
 		}
 
@@ -65,9 +75,16 @@ component
 		var constructorArgs = duplicate( arguments.config.constructorArgs );
 		parseConstructorArgs( constructorArgs );
 
+		var createObjectClasspath = arguments.classpath;
+
+		if ( !arguments.useFullClasspath )
+		{
+			createObjectClasspath = arguments.config.rootPackage & "." & createObjectClasspath;
+		}
+
 		var object = createObject(
 			"component",
-			arguments.classpath
+			createObjectClasspath
 		);
 
 		if ( structKeyExists( object, "init" ) )
@@ -77,10 +94,10 @@ component
 			);
 		}
 
-		var objectClasspath = replaceNoCase( arguments.classpath, arguments.config.rootPackage & ".", "", "one" );
+		var setObjectClasspath = replaceNoCase( arguments.classpath, arguments.config.rootPackage & ".", "", "one" );
 
 		variables.objects.set(
-			objectClasspath,
+			setObjectClasspath,
 			object
 		);
 	}
@@ -175,14 +192,28 @@ component
 	}
 
 	private Struct function getObjectConfigByClasspath(
-		required String classpath
+		required String classpath,
+		Boolean useFullClasspath = true
 	)
 	{
 		var config = {};
 
 		for ( var i = 1; i <= arrayLen( variables.config ); i++ )
 		{
-			if ( variables.config[ i ].classpath == arguments.classpath )
+			if (
+				(
+					arguments.useFullClasspath &&
+					variables.config[ i ].classpath == arguments.classpath
+				) ||
+				(
+					!arguments.useFullClasspath &&
+					reReplaceNoCase(
+							variables.config[ i ].classpath,
+							"^" & variables.config[ i ].rootPackage & ".",
+							""
+						) == arguments.classpath
+				)
+			)
 			{
 				config = variables.config[ i ];
 				break;
