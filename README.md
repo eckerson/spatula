@@ -17,6 +17,7 @@ Things to Do
 * * Add wiki markup support.
 * * Look into additional markup support (markdown?).
 * Add additional error handling with view templates (onError, onMissingTemplate, Missing View CFM, etcetera).
+* Change the object caching service to auto-load from a root folder (with the first folder being the library name).
 
 
 MVC
