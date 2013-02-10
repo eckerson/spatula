@@ -13,7 +13,6 @@ Things to Do
 ------------
 * Review the folder structure used by the object library service.
 * Review setting organization (use sub-objects or split into separate configs).
-* Migrate setting caches into a single Struct (to prevent the cache names from conflicting with other framework variables).
 * Add markup parsing support.
 * * Add wiki markup support.
 * * Look into additional markup support (markdown?).

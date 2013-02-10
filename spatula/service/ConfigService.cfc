@@ -18,15 +18,17 @@ component
 		String configName = "Application"
 	)
 	{
-		if ( structKeyExists( application, arguments.configName & "Config" ) )
+		if ( structKeyExists( application[ "configs" ], arguments.configName & "Config" ) )
 		{
-			return application[ arguments.configName & "Config" ].get( arguments.key );
+			return application[ "configs" ][ arguments.configName & "Config" ].get( arguments.key );
 		}
 	}
 
 	//Business Logic
 	public void function createConfigs()
 	{
+		application[ "configs" ] = {};
+
 		var configFiles = directoryList( expandPath( variables.configRoot ), false, "name", "*.json" );
 
 		for ( var i = 1; i <= arrayLen( configFiles ); i++ )
@@ -49,6 +51,11 @@ component
 				isFinalized = true
 			);
 
-		application[ configName & "Config" ] = configCache;
+		if ( !structKeyExists( application, "configs" ) )
+		{
+			application[ "configs" ] = {};
+		}
+
+		application[ "configs" ][ configName & "Config" ] = configCache;
 	}
 }
