@@ -16,7 +16,6 @@ Things to Do
 * Add markup parsing support.
 * * Add wiki markup support.
 * * Look into additional markup support (markdown?).
-* Remove unused objects (Response bean).
 
 
 MVC
