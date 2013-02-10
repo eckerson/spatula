@@ -1,8 +1,6 @@
 <cfscript>
 	//Create the site configuration
-	config.createConfig(
-		"Application"
-	);
+	config.createConfigs();
 
 	//Create the library configurations
 	spatula.createLibraryConfig(

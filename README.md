@@ -10,7 +10,6 @@ Things to Do
 * Review the folder structure used by the object library service.
 * Add the option to parse wiki formatting automatically.
 * Add the ability for the service response to appropriately set the HTTP response codes based on its status.
-* Change the config service to auto-load any configuration file in the "/lib/config" directory.
 
 
 MVC
@@ -60,8 +59,10 @@ Configuration
 -------------
 Configuration files are stored in the "/lib/config" directory.
 The files are formatted in JSON, with a *.json file extension.
+The application will auto-load any JSON file in that directory.
 To reference a config setting, call "config.get( _setting_, _config (optional)_ )".
 By default, "config.get()" will reference the "Application" config (so you only need to specify a config if you are reading from an alternative config file).
+The name of the config is determined by the file name (for example, settings in the foo.json config can be referenced by calling "config.get( _setting_, "foo" )").
 
 
 Object Caching

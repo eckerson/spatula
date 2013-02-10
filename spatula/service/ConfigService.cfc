@@ -25,11 +25,22 @@ component
 	}
 
 	//Business Logic
+	public void function createConfigs()
+	{
+		var configFiles = directoryList( expandPath( variables.configRoot ), false, "name", "*.json" );
+
+		for ( var i = 1; i <= arrayLen( configFiles ); i++ )
+		{
+			createConfig( configFiles[ i ] );
+		}
+	}
+
 	public void function createConfig(
-		required String configName
+		required String configFile
 	)
 	{
-		var configPath = variables.configRoot & arguments.configName & ".json";
+		var configName = reReplaceNoCase( arguments.configFile, ".json$", "" );
+		var configPath = variables.configRoot & arguments.configFile;
 		var jsonConfig = fileRead( expandPath( configPath ) );
 		var configObject = deserializeJSON( jsonConfig );
 		var configCache = createObject( "component", "spatula.bean.Cache" )
@@ -38,6 +49,6 @@ component
 				isFinalized = true
 			);
 
-		application[ arguments.configName & "Config" ] = configCache;
+		application[ configName & "Config" ] = configCache;
 	}
 }
