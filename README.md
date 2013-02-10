@@ -13,33 +13,27 @@ Things to Do
 * Change the config service to auto-load any configuration file in the "/lib/config" directory.
 
 
-Request Process
----------------
-1. Request points to "/Index.cfm/ControllerName/ViewName"
-2. Application calls "lib.controller.ControllerName:ViewName()" controller function.
-3. The controller function makes any service calls to handle any business logic for the request
-4. The application loads the "/lib/view/controllername/ViewName.cfm" to handle the view display.
+MVC
+---
+There are currently two supported styles for making requests (determined by the _CONTROLLER_STYLE_ config setting):
 
+* *wiki*
 
-Request Parsing
----------------
-A utility object is called to parse the request variables.
+	The address is formatted like so: "/controller:view/parameters?query_string".
+	For example, "website.com/Index.cfm/main:home" will load the _main_ controller and the _home_ view.
+	If only one item is specified for the controller or view, it's assumed to be the view.
+	For example, if the URL is "website.com/Index.cfm/foo", the application will assume the default controller and use the _foo_ view.
+	This is done to be consistent with standard wiki URL parsing.
 
-The URL and FORM scopes are merged together into a "request.parameters" Struct.
+* *default*
 
-* Any key found in both the URL and FORM scopes will use the one in the FORM scope (So a form variable can temporarily overwrite a URL variable for the post).
+	The address is formatted like so: "/controller/view/parameters?query_string".
+	For example, "website.com/Index.cfm/main/home" will load the _main_ controller and the _home_ view.
+	If only one item is specified for the controller or view, it's assumed to be the controller.
+	For example, if the URL is "website.com/Index.cfm/foo", the application will use the _foo_ controller and assume the default view.
+	This is done to be consistent with standard MVC URL parsing.
 
-PathInfo is a slash-delimited list of request parameters.
-
-* The first two items in PathInfo are the controller and view (in that order).
-* * The request controller is stored in "request.controller".
-* * The request view is stored in "request.view".
-* Any additional items in PathInfo are colon-delimited lists of variables and values (for example, variable:value). These are appended into the request parameters.
-
-
-MVC Structure
--------------
-A service object handles loading the view for the request based on what is in "request.controller" and "request.view".
+The default controller and view to use when one or both are not specified are determined by the _DEFAULT_CONTROLLER_ and _DEFAULT_VIEW_ config settings.
 
 * The request controller determines the controller object and the view folder.
 * The request view determines the controller function and the view file.
@@ -49,6 +43,17 @@ If the Struct returned by the controller function contains a "title" or a "templ
 
 * By default, the page title is the name of the View.
 * By default, the application uses the "Default" template.
+
+The currently used controller is stored in _request.controller_.
+Likewise, the currently used view is stored in _request.view_.
+
+
+Parameters
+----------
+The parameters found in the path info are merged with the URL and FORM variables scopes.
+The merged parameters are stsored in _request.parameters_.
+The parameters found in the path info are slash-delimited (/) and are formatted like so: "key:value".
+When merging the URL and FORM scopes into request.parameters; the URL scope overwrites any duplicate parameters and the FORM scope overwrites any duplicate URL variables and parameters.
 
 
 Configuration

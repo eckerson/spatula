@@ -1,5 +1,16 @@
 {
+	// The name of the website
 	"SITE_NAME" : "$SITE_NAME",
+
+	// CONTROLLER_STYLE determines the format for specifying the controller and view.
+	// Available options are:
+	// * "default" - Uses the format of "/controller/view/params".
+	// * "wiki" - Uses the format of "/controller:view/params".
+	"CONTROLLER_STYLE" : "default",
+
+	// The default controller to use when none is specified.
 	"DEFAULT_CONTROLLER" : "Main",
+
+	// The default view to use when none is specified.
 	"DEFAULT_VIEW" : "Home"
 }

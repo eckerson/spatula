@@ -3,8 +3,6 @@ component
 {
 	public Struct function home()
 	{
-		return {
-			title = "Home Page"
-		};
+		return {};
 	}
 }
