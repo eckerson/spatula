@@ -13,8 +13,6 @@ component
 		var listReplaceRegex = "^([\*##]+)([\s\w\W\S]+)";
 		var currentLine = "";
 		var previousLine = "";
-		var currentTag = "";
-		var previousTag = "";
 		var currentList = [];
 		var previousList = [];
 		var listLevelDifference = 0;
@@ -56,49 +54,24 @@ component
 				currentLine = "";
 			}
 
-			if ( currentLine != previousLine )
-			{
-				if ( previousLine == "li" )
-				{
-					previousTag = getListType( previousList[ arrayLen( previousList ) ] );
-
-					currentList = [];
-
-					arrayAppend(
-								formattedTextArray,
-								decrementListLevel( previousList, arrayLen( previousList ) )
-							);
-				}
-				else
-				{
-					previousTag = previousLine;
-				}
-				
-				if ( currentLine == "li" )
-				{
-					currentTag = getListType( currentList[ arrayLen( currentList ) ] );
-				}
-				else
-				{
-					currentTag = currentLine;
-				}
-
-				if ( previousLine != "" )
-				{
-					arrayAppend( formattedTextArray, "</" & previousTag & ">" );
-				}
-
-				if ( currentLine != "" )
-				{
-					arrayAppend( formattedTextArray, "<" & currentTag & ">" );
-				}
-			}
-
 			if ( currentLine == "li" )
 			{
-				//Determine if the depth should change
-				if ( arrayLen( previousList ) > 0 )
+				if ( previousLine != "li" &&
+					previousLine != "" )
 				{
+					arrayAppend( formattedTextArray, "</" & previousLine & ">" );
+				}
+
+				if ( arrayLen( previousList ) == 0 )
+				{
+					arrayAppend(
+							formattedTextArray,
+							incrementListLevel( currentList, 1 )
+						);
+				}
+				else if ( arrayLen( previousList ) > 0 )
+				{
+					//Determine if the depth should change
 					listLevelDifference = arrayLen( currentList ) - arrayLen( previousList );
 					listLevelStartIndex = arrayLen( previousList );
 
@@ -115,7 +88,7 @@ component
 						//Go shallower
 						arrayAppend(
 								formattedTextArray,
-								decrementListLevel( previousList, listLevelStartIndex )
+								decrementListLevel( previousList, arrayLen( currentList ) )
 							);
 					}
 				}
@@ -127,11 +100,39 @@ component
 			}
 			else
 			{
+				if ( currentLine != previousLine )
+				{
+					if ( previousLine == "li" )
+					{
+						previousList = currentList;
+						currentList = [];
+
+						arrayAppend(
+							formattedTextArray,
+							decrementListLevel( previousList, 0 )
+						);
+
+						previousList = [];
+					}
+					else
+					{
+						if ( previousLine != "" )
+						{
+							arrayAppend( formattedTextArray, "</" & previousLine & ">" );
+						}
+
+						if ( currentLine != "" )
+						{
+							arrayAppend( formattedTextArray, "<" & currentLine & ">" );
+						}
+					}
+				}
+
 				arrayAppend( formattedTextArray, parse_inlineFormatting( theText ) );
 			}
 		}
 
-		arrayAppend( formattedTextArray, "</" & currentLine & ">" );
+		//arrayAppend( formattedTextArray, "</" & currentLine & ">" );
 
 		formattedText = arrayToList( formattedTextArray, chr( 10 ) );
 		return formattedText;
@@ -202,20 +203,18 @@ component
 	)
 	{
 		var listString = "";
+		var listType = "";
 
 		for ( var i = arguments.startIndex; i <= arrayLen( arguments.listArray ); i++ )
 		{
-			listString &= "<li>";
+			listType = getListType( arguments.listArray[ i ] );
 
-			switch( arguments.listArray[ i ] )
+			if ( i != 1 )
 			{
-				case "*":
-					listString &= "<ul>";
-					break;
-
-				case "##":
-					listString &= "<ol>";
+				listString &= "<li>";
 			}
+
+			listString &= "<" & listType & ">";
 		}
 
 		return listString;
@@ -227,20 +226,17 @@ component
 	)
 	{
 		var listString = "";
+		var listType = "";
 
-		for ( var i = arrayLen( arguments.listArray ); i >= arguments.endIndex; i-- )
+		for ( var i = arrayLen( arguments.listArray ); i > arguments.endIndex; i-- )
 		{
-			switch( arguments.listArray[ i ] )
-			{
-				case "*":
-					listString &= "</ul>";
-					break;
+			listType = getListType( arguments.listArray[ i ] );			
+			listString &= "</" & listType & ">";
 
-				case "##":
-					listString &= "</ol>";
+			if ( i != 1 )
+			{
+				listString &= "</li>";
 			}
-			
-			listString &= "</li>";
 		}
 
 		return listString;
