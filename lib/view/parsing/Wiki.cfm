@@ -3,6 +3,7 @@ TODOs:
 * Definition lists
 * Smarter link parsing (adjusts depending on the controller style)
 * Get mixed-style lists to create the HTML properly.
+* Fix list nesting to mirror mediawiki's behavior.
 
 == Formatting ==
 === Text Markup ===
@@ -89,6 +90,62 @@ Text below
 Text above
 ----
 Text below
+			</td>
+		</tr>
+		<tr>
+			<td>Bullet List</td>
+			<td>
+<pre>
+* Start each line
+* with an asterisk (*).
+** More asterisks gives deeper
+*** and deeper levels.
+* Line breaks<br />don't break levels.
+*** But jumping levels creates empty space.
+Any other start ends the list.
+</pre>
+			</td>
+			<td>
+* Start each line
+* with an asterisk (*).
+** More asterisks gives deeper
+*** and deeper levels.
+* Line breaks<br />don't break levels.
+*** But jumping levels creates empty space.
+Any other start ends the list.
+			</td>
+		</tr>
+		<tr>
+			<td>Numbered List</td>
+			<td>
+<pre>
+# Start each line
+# with a number sign (#).
+## More number signs gives deeper
+### and deeper
+### levels.
+# Line breaks<br />don't break levels.
+### But jumping levels creates empty space.
+# Blank lines
+
+# end the list and start another.
+Any other start also
+ends the list.
+</pre>
+			</td>
+			<td>
+# Start each line
+# with a number sign (#).
+## More number signs gives deeper
+### and deeper
+### levels.
+# Line breaks<br />don't break levels.
+### But jumping levels creates empty space.
+# Blank lines
+
+# end the list and start another.
+Any other start also
+ends the list.
 			</td>
 		</tr>
 	</tbody>
