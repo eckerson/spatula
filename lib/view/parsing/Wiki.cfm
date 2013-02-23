@@ -1,7 +1,6 @@
 TODOs:
 * nowiki/pre syntax (in progress).
 * Definition lists
-* Smarter link parsing (adjusts depending on the controller style)
 * Get mixed-style lists to create the HTML properly.
 * Fix list nesting to mirror mediawiki's behavior.
 

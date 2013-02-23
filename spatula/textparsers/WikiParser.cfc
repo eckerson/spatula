@@ -1,5 +1,6 @@
 component
 	implements="spatula.interfaces.Parser"
+	extends="spatula.TextParser"
 {
 
 	public String function parseText(
@@ -420,6 +421,9 @@ component
 	)
 	{
 		var formattedText = arguments.unformattedText;
+		var controllerStyle = variables.controllerStyle;
+		var defaultController = variables.defaultController;
+		var defaultView = variables.defaultView;
 		var pattern = "\[\[(.*?)\]\]((?:<nowiki(?: ){0,1}(?:\/){0,1}>)|[\w]*)";
 		var wikiLink = "";
 		var wikiLinkText = "";
@@ -482,8 +486,35 @@ component
 				}
 			}
 
+			//Format the link to conform to the controller style
+			var formattedLinkPage = "";
+			var linkPageArray = listToArray( linkPage, ":", true );
+
+			switch ( controllerStyle )
+			{
+				case "wiki":
+					formattedLinkPage = linkPage;
+					break;
+
+				default:
+					if ( arrayLen( linkPageArray ) == 1 )
+					{
+						formattedLinkPage = defaultController & "/" & linkPageArray[ 1 ];
+					}
+					else if ( arrayLen( linkPageArray ) > 1 &&
+						len( trim( linkPageArray[ 2 ] ) ) )
+					{
+						formattedLinkPage = linkPageArray[ 1 ] & "/" & linkPageArray[ 2 ];
+					}
+					else
+					{
+						formattedLinkPage = linkPageArray[ 1 ] & "/" & defaultView;
+					}
+					break;
+			}
+
 			//Make page for link URL-safe (replace spaces with underscores)
-			linkPage = replace( linkPage, " ", "_", "all" );
+			formattedLinkPage = replace( formattedLinkPage, " ", "_", "all" );
 
 			//Append word ending if approperiate
 			if ( len( trim( wordEnding ) ) &&
@@ -493,7 +524,7 @@ component
 			}
 
 			//Build the HTML link
-			htmlLink = '<a href="/Index.cfm/' & linkPage & '">' & linkLabel & '</a>';
+			htmlLink = '<a href="/Index.cfm/' & formattedLinkPage & '">' & linkLabel & '</a>';
 
 			formattedText = replace( formattedText, wikiLink, htmlLink );
 		}
