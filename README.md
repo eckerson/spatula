@@ -54,7 +54,7 @@ If the Struct returned by the controller function contains a "title" or a "templ
 The currently used controller is stored in _request.controller_.
 Likewise, the currently used view is stored in _request.view_.
 
-If the controller component does not contain a function named after the requested view, the framework will fire the onMissingMethod handler to load a view to handle the error.  The template loaded can be found in "/lib/template/error/MissingViewFunction.cfm". The onMissingMethod function can be overridden in the controller object to perform custom functionality (such as loading user-defined content from a database).
+If the controller component does not contain a function named after the requested view, the framework will fire the onMissingControllerFunction handler to load a view to handle the error.  The template loaded can be found in "/lib/template/error/MissingControllerFunction.cfm". The onMissingControllerFunction function can be overridden in the controller object to perform custom functionality (such as loading user-defined content from a database).
 
 
 Parameters

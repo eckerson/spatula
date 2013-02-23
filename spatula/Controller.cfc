@@ -39,7 +39,7 @@ component
 		}
 		else
 		{
-			viewObject = onMissingMethod( arguments.view, arguments );
+			viewObject = onMissingControllerMethod( arguments.controller, arguments.view );
 		}
 
 		return viewObject;
@@ -63,14 +63,17 @@ component
 			.init( argumentCollection = arguments );
 	}
 
-	public any function onMissingMethod(
-		String method,
-		Struct args
+	public bean.View function onMissingControllerMethod(
+		required String controller,
+		required String view
 	)
 	{
 		var content = include(
-				template = "/lib/template/error/MissingViewFunction.cfm",
-				params = {}
+				template = "/lib/template/error/MissingControllerMethod.cfm",
+				params = {
+					controller = arguments.controller,
+					view = arguments.view
+				}
 			);
 		var viewObject = createView(
 				title = "View not Found",
@@ -79,4 +82,5 @@ component
 
 		return viewObject;
 	}
+
 }
