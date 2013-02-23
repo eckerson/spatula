@@ -19,120 +19,149 @@ component
 		var listLevelStartIndex = 0;
 		var isBlock = false;
 		var theText = "";
+		var useFormatting = true;
 
 //writeDump( unformattedTextArray );
 		for ( var i = 1; i <= arrayLen( unformattedTextArray ); i++ )
 		{
 			theText = unformattedTextArray[ i ];
 
-			//Handle block formatting
-			theText = parse_blockFormatting( theText );
-
-			//Handle link formatting
-			theText = parse_linkFormatting( theText );
-
-			isBlock = isBlockTag( theText );
-
-			//Determine what block formatting to use for the line
-			previousLine = currentLine;
-			if ( reFind( listFindRegex, unformattedTextArray[ i ] ) )
+			if ( reFindNoCase( "^<pre", trim( theText ), 1, false ) )
 			{
-				currentLine = "li";
-				previousList = currentList;
-				currentList = listToArray( reReplace( theText, listReplaceRegex, "\1" ), "" );
-			}
-			else if ( unformattedTextArray[ i ] == "" )
-			{
-				currentLine = "";
-			}
-			else if ( !isBlock )
-			{
-				currentLine = "p";
-			}
-			else
-			{
-				currentLine = "";
+				//Start of a preformatted block
+				useFormatting = false;
 			}
 
-			if ( currentLine == "li" )
+			if ( useFormatting == true )
 			{
-				if ( previousLine != "li" &&
-					previousLine != "" )
+				//Handle block formatting
+				theText = parse_blockFormatting( theText );
+
+				//Handle link formatting
+				theText = parse_linkFormatting( theText );
+
+				isBlock = isBlockTag( theText );
+
+				//Determine what block formatting to use for the line
+				previousLine = currentLine;
+				if ( reFind( listFindRegex, unformattedTextArray[ i ] ) )
 				{
-					arrayAppend( formattedTextArray, "</" & previousLine & ">" );
+					currentLine = "li";
+					previousList = currentList;
+					currentList = listToArray( reReplace( theText, listReplaceRegex, "\1" ), "" );
+				}
+				else if ( unformattedTextArray[ i ] == "" )
+				{
+					currentLine = "";
+				}
+				else if ( !isBlock )
+				{
+					currentLine = "p";
+				}
+				else
+				{
+					currentLine = "";
 				}
 
-				if ( arrayLen( previousList ) == 0 )
+				if ( currentLine == "li" )
 				{
+					if ( previousLine != "li" &&
+						previousLine != "" )
+					{
+						arrayAppend( formattedTextArray, "</" & previousLine & ">" );
+					}
+
+					if ( arrayLen( previousList ) == 0 )
+					{
+						arrayAppend(
+								formattedTextArray,
+								incrementListLevel( currentList, 1 )
+							);
+					}
+					else if ( arrayLen( previousList ) > 0 )
+					{
+						//Determine if the depth should change
+						listLevelDifference = arrayLen( currentList ) - arrayLen( previousList );
+						listLevelStartIndex = arrayLen( previousList );
+
+						if ( listLevelDifference > 0 )
+						{
+							//Go deeper
+							arrayAppend(
+									formattedTextArray,
+									incrementListLevel( currentList, listLevelStartIndex + 1 )
+								);
+						}
+						else if ( listLevelDifference < 0 )
+						{
+							//Go shallower
+							arrayAppend(
+									formattedTextArray,
+									decrementListLevel( previousList, arrayLen( currentList ) )
+								);
+						}
+					}
+
 					arrayAppend(
 							formattedTextArray,
-							incrementListLevel( currentList, 1 )
+							"<li>" & parse_inlineFormatting( reReplace( theText, listReplaceRegex, "\2" ) ) & "</li>"
 						);
 				}
-				else if ( arrayLen( previousList ) > 0 )
+				else
 				{
-					//Determine if the depth should change
-					listLevelDifference = arrayLen( currentList ) - arrayLen( previousList );
-					listLevelStartIndex = arrayLen( previousList );
+					if ( currentLine != previousLine )
+					{
+						if ( previousLine == "li" )
+						{
+							previousList = currentList;
+							currentList = [];
 
-					if ( listLevelDifference > 0 )
-					{
-						//Go deeper
-						arrayAppend(
+							arrayAppend(
 								formattedTextArray,
-								incrementListLevel( currentList, listLevelStartIndex + 1 )
+								decrementListLevel( previousList, 0 )
 							);
+
+							previousList = [];
+						}
+						else
+						{
+							if ( previousLine != "" )
+							{
+								arrayAppend( formattedTextArray, "</" & previousLine & ">" );
+							}
+
+							if ( currentLine != "" )
+							{
+								arrayAppend( formattedTextArray, "<" & currentLine & ">" );
+							}
+						}
 					}
-					else if ( listLevelDifference < 0 )
-					{
-						//Go shallower
-						arrayAppend(
-								formattedTextArray,
-								decrementListLevel( previousList, arrayLen( currentList ) )
-							);
-					}
+
+					arrayAppend( formattedTextArray, parse_inlineFormatting( theText ) );
 				}
-
-				arrayAppend(
-						formattedTextArray,
-						"<li>" & parse_inlineFormatting( reReplace( theText, listReplaceRegex, "\2" ) ) & "</li>"
-					);
 			}
 			else
 			{
-				if ( currentLine != previousLine )
-				{
-					if ( previousLine == "li" )
-					{
-						previousList = currentList;
-						currentList = [];
+				arrayAppend( formattedTextArray, theText );
+			}
 
-						arrayAppend(
-							formattedTextArray,
-							decrementListLevel( previousList, 0 )
-						);
-
-						previousList = [];
-					}
-					else
-					{
-						if ( previousLine != "" )
-						{
-							arrayAppend( formattedTextArray, "</" & previousLine & ">" );
-						}
-
-						if ( currentLine != "" )
-						{
-							arrayAppend( formattedTextArray, "<" & currentLine & ">" );
-						}
-					}
-				}
-
-				arrayAppend( formattedTextArray, parse_inlineFormatting( theText ) );
+			if ( reFindNoCase( "<\/pre", trim( theText ), 1, false ) )
+			{
+				useFormatting = true;
 			}
 		}
 
-		//arrayAppend( formattedTextArray, "</" & currentLine & ">" );
+		if ( currentLine == "li" )
+		{
+			arrayAppend(
+					formattedTextArray,
+					decrementListLevel( currentList, 0 )
+				);
+		}
+		else if ( currentLine != "" )
+		{
+			arrayAppend( formattedTextArray, "</" & currentLine & ">" );
+		}
 
 		formattedText = arrayToList( formattedTextArray, chr( 10 ) );
 		return formattedText;
