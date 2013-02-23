@@ -14,7 +14,7 @@ Things to Do
 * Review the folder structure used by the object library service.
 * Review setting organization (use sub-objects or split into separate configs).
 * Add markup parsing support.
-* * Add wiki markup support.
+* * Add wiki markup support (in progress).
 * * Look into additional markup support (markdown?).
 * Add additional error handling with view templates (onError, onMissingTemplate, Missing View CFM, etcetera).
 * Change the object caching service to auto-load from a root folder (with the first folder being the library name).

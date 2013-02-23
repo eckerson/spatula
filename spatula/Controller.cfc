@@ -9,6 +9,7 @@ component
 		var params = {};
 		var title = replace( arguments.view, "_", " ", "all" );
 		var template = "Default";
+		var format = "Default";
 		var viewObject = 0;
 
 		if ( structKeyExists( this, arguments.view ) )
@@ -27,6 +28,12 @@ component
 			{
 				template = params.template;
 			}
+
+			if ( structKeyExists( params, "format" ) &&
+				len( trim( params.format ) ) )
+			{
+				format = params.format;
+			}
 			
 			var viewPath = "/lib/view/" & lcase( arguments.controller ) & "/" & arguments.view & ".cfm";
 			var content = include( template = viewPath, params = params );
@@ -34,7 +41,8 @@ component
 			viewObject = createView(
 					title = title,
 					content = content,
-					template = template
+					template = template,
+					format = format
 				);
 		}
 		else

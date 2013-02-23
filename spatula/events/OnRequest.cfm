@@ -12,7 +12,7 @@
 
 	if ( isInstanceOf( local.view, "spatula.bean.View" ) )
 	{
-		variables.content = local.view.getContent();
+		variables.content = local.view.getFormattedContent();
 		variables.title = local.view.getTitle();
 		local.template = "/lib/template/" & local.view.getTemplate() & ".cfm";
 
