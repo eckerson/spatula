@@ -8,6 +8,7 @@ component
 	// Properties
 	property type="Struct" name="libraryConfig" setter=false;
 	property type="Boolean" name="useLazyLoadByDefault" setter=false;
+	property type="String" name="libRoot" setter=false;
 
 
 	// Constructors
@@ -18,6 +19,7 @@ component
 		//Set the default values for the properties
 		variables.libraryConfig = {};
 		variables.useLazyLoadByDefault = arguments.useLazyLoadByDefault;
+		variables.libRoot = "/app/lib";
 
 		//Return a reference to the initialized object
 		return this;
@@ -77,61 +79,64 @@ component
 	 * under "application.libraries[library]". Each object's config is stored
 	 * in an array for the scope the object is to be cached in.
 	 */
-	public void function createLibraryConfig(
-		required String libraries,
-		required String libraryDotPaths
-	)
+	public void function createLibraryConfig()
 	{
-		var libraryArray = listToArray( arguments.libraries, "," );
-		var libraryDotPathArray = listToArray( arguments.libraryDotPaths, "," );
+		/*
+		 * Because directoryList as of CF10 does not support a type attribute from cfdirectory,
+		 * the below code can be simplified by using a wrapper for cfdirectory or on newer versions
+		 * of CF.
+		 */
+		var libraries = directoryList( expandPath( variables.libRoot ), false, "query" );
 
-		for ( var l = 1; l <= min( arrayLen( libraryArray ), arrayLen( libraryDotPathArray ) ); l++ )
+		for ( var l = 1; l <= libraries.recordCount; l++ )
 		{
-			var library = libraryArray[ l ];
-			var libraryDotPath = libraryDotPathArray[ l ];
-
-			var libraryPath = convertToPath(
-				libraryDotPath
-			);
-			var objects = getLibraryObjects(
-				libraryPath
-			);
-			var libraryConfig = {
-				application = [],
-				request = [],
-				session = []
-			};
-			var objectConfig = 0;
-			var dotPath = 0;
-			var objectName = 0;
-			var classpath = 0;
-			var rootPackage = libraryDotPath;
-
-			//Get the config for each object
-			for ( var i = 1; i <= objects.recordCount; i++ )
+			if ( libraries.type[ l ] == "Dir" )
 			{
-				//Determine object pathing information
-				dotPath = convertToDotPath( objects.directory[ i ] );
-				objectName = reReplaceNoCase( objects.name[ i ], ".cfc$", "" );
-				classpath = dotPath & "." & objectName;
+				var library = libraries.name[ l ];
+				var libraryPath = variables.libRoot & "/" & libraries.name[ l ];
+				var libraryDotPath = convertToDotPath( libraryPath );
 
-				//Get the config
-				objectConfig = getObjectMetaConfig( classpath, library );
-				objectConfig[ "rootPackage" ] = rootPackage;
+				var objects = getLibraryObjects(
+					libraryPath
+				);
+				var libraryConfig = {
+					application = [],
+					request = [],
+					session = []
+				};
+				var objectConfig = 0;
+				var dotPath = 0;
+				var objectName = 0;
+				var classpath = 0;
+				var rootPackage = libraryDotPath;
 
-				//Append the object config to the library config
-				if ( structKeyExists( libraryConfig, objectConfig.scope ) )
+				//Get the config for each object
+				for ( var i = 1; i <= objects.recordCount; i++ )
 				{
-					arrayAppend( libraryConfig[ objectConfig.scope ], objectConfig );
+					//Determine object pathing information
+					dotPath = convertToDotPath( objects.directory[ i ] );
+					objectName = reReplaceNoCase( objects.name[ i ], ".cfc$", "" );
+					classpath = dotPath & "." & objectName;
+
+					//Get the config
+					objectConfig = getObjectMetaConfig( classpath, library );
+					objectConfig[ "rootPackage" ] = rootPackage;
+
+					//Append the object config to the library config
+					if ( structKeyExists( libraryConfig, objectConfig.scope ) )
+					{
+						arrayAppend( libraryConfig[ objectConfig.scope ], objectConfig );
+					}
+
 				}
 
+				//Cache the library config
+				variables.libraryConfig[ library ] = createObject( "component", "spatula.beans.Cache" ).init(
+					libraryConfig,
+					true
+				);	
 			}
-
-			//Cache the library config
-			variables.libraryConfig[ library ] = createObject( "component", "spatula.beans.Cache" ).init(
-				libraryConfig,
-				true
-			);
+			
 		}
 
 	}
@@ -157,6 +162,7 @@ component
 	)
 	{
 		var dotPath = replaceNoCase( arguments.path, expandPath( "/" ), "" );
+		dotPath = reReplace( dotPath, "^/", "" );
 
 		dotPath = reReplace( dotPath, "[\\\/]", ".", "all" );
 
@@ -168,7 +174,7 @@ component
 	)
 	{
 		return directoryList(
-			arguments.rootPath,
+			expandPath( arguments.rootPath ),
 			true,
 			"Query",
 			"*.cfc",

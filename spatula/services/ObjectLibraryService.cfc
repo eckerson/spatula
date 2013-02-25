@@ -23,7 +23,7 @@ component
 				for ( var i = 1; i <= arrayLen( libraryConfig[ scope ] ); i++ )
 				{
 					var classpathToCompare = libraryConfig[ scope ][ i ].rootPackage & "." & arguments.classpath;
-					
+
 					if ( classpathToCompare == libraryConfig[ scope ][ i ].classpath )
 					{
 						return getLibrary( arguments.library, scope ).get( arguments.classpath );
@@ -57,8 +57,6 @@ component
 	}
 
 	public void function createLibraryConfig(
-		required String libraries,
-		required String libraryDotPaths,
 		Boolean useLazyLoadByDefault = true
 	)
 	{
@@ -67,9 +65,7 @@ component
 			"spatula.factories.LibraryConfigFactory"
 		).init( arguments.useLazyLoadByDefault );
 
-		application.libraryConfig.createLibraryConfig(
-			argumentCollection = arguments
-		);
+		application.libraryConfig.createLibraryConfig();
 	}
 
 	public void function createLibraries(
