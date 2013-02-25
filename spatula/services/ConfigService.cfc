@@ -45,7 +45,7 @@ component
 		var configPath = variables.configRoot & arguments.configFile;
 		var jsonConfig = fileRead( expandPath( configPath ) );
 		var configObject = deserializeJSON( jsonConfig );
-		var configCache = createObject( "component", "spatula.bean.Cache" )
+		var configCache = createObject( "component", "spatula.beans.Cache" )
 			.init(
 				cache = configObject,
 				isFinalized = true

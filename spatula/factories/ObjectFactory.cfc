@@ -13,7 +13,7 @@ component
 		//Set the properties to their default values
 		variables.objects = createObject(
 			"component",
-			"spatula.bean.Cache"
+			"spatula.beans.Cache"
 		).init();
 		variables.config = spatula.getLibraryConfig()[ arguments.library ].get( arguments.scope );
 

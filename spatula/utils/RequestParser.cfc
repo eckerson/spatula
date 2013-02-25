@@ -62,7 +62,7 @@ component
 		required Struct formScope
 	)
 	{
-		var configService = createObject( "component", "spatula.service.ConfigService" ).init();
+		var configService = createObject( "component", "spatula.services.ConfigService" ).init();
 		var pathInfo = listToArray( arguments.cgiScope[ "path_info" ], "/" );
 		var parameters = {};
 		var thisParam = 0;

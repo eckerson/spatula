@@ -64,7 +64,7 @@ component
 	{
 		application.libraryConfig = createObject(
 			"component",
-			"spatula.factory.LibraryConfigFactory"
+			"spatula.factories.LibraryConfigFactory"
 		).init( arguments.useLazyLoadByDefault );
 
 		application.libraryConfig.createLibraryConfig(
@@ -82,7 +82,7 @@ component
 		{
 			"#arguments.scope#.#libraries[ i ]#" = createObject(
 				"component",
-				"spatula.factory.ObjectFactory"
+				"spatula.factories.ObjectFactory"
 			).init(
 				libraries[ i ],
 				arguments.scope

@@ -2,11 +2,11 @@ component
 {
 	variables.spatula = createObject(
 			"component",
-			"spatula.service.ObjectLibraryService"
+			"spatula.services.ObjectLibraryService"
 		).init();
 
 	variables.config = createObject(
 			"component",
-			"spatula.service.ConfigService"
+			"spatula.services.ConfigService"
 		).init();
 }

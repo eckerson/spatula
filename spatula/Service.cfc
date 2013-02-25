@@ -1,8 +1,8 @@
 component
 	extends="Base"
 {
-	public bean.Response function getNewResponse()
+	public beans.Response function getNewResponse()
 	{
-		return createObject( "component", "bean.Response" ).init();
+		return createObject( "component", "beans.Response" ).init();
 	}
 }

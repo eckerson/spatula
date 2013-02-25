@@ -7,7 +7,7 @@ component
 		return this;
 	}
 
-	public spatula.bean.View function generateView(
+	public spatula.beans.View function generateView(
 		required String controller,
 		required String view
 	)

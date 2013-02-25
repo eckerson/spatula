@@ -128,7 +128,7 @@ component
 			}
 
 			//Cache the library config
-			variables.libraryConfig[ library ] = createObject( "component", "spatula.bean.Cache" ).init(
+			variables.libraryConfig[ library ] = createObject( "component", "spatula.beans.Cache" ).init(
 				libraryConfig,
 				true
 			);

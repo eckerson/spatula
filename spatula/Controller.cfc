@@ -1,7 +1,7 @@
 component
 	extends="Base"
 {
-	public bean.View function renderView(
+	public beans.View function renderView(
 		required String controller,
 		required String view
 	)
@@ -61,17 +61,17 @@ component
 		return createObject( "component", "utils.Include" ).init( argumentCollection = arguments );
 	}
 
-	private bean.View function createView(
+	private beans.View function createView(
 		String title,
 		String content,
 		String template
 	)
 	{
-		return createObject( "component", "bean.View" )
+		return createObject( "component", "beans.View" )
 			.init( argumentCollection = arguments );
 	}
 
-	public bean.View function onMissingControllerMethod(
+	public beans.View function onMissingControllerMethod(
 		required String controller,
 		required String view
 	)
