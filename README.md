@@ -11,13 +11,11 @@ The purpose of this framework is to allow the application to serve up content wi
 
 Things to Do
 ------------
-* Review the folder structure used by the object library service.
 * Review setting organization (use sub-objects or split into separate configs).
 * Add markup parsing support.
 * * Add wiki markup support (in progress).
 * * Look into additional markup support (markdown?).
 * Add additional error handling with view templates (onError, onMissingTemplate, Missing View CFM, etcetera).
-* Change the object caching service to auto-load from a root folder (with the first folder being the library name).
 
 
 MVC
@@ -54,7 +52,7 @@ If the Struct returned by the controller function contains a "title" or a "templ
 The currently used controller is stored in _request.controller_.
 Likewise, the currently used view is stored in _request.view_.
 
-If the controller component does not contain a function named after the requested view, the framework will fire the onMissingControllerFunction handler to load a view to handle the error.  The template loaded can be found in "/lib/template/error/MissingControllerFunction.cfm". The onMissingControllerFunction function can be overridden in the controller object to perform custom functionality (such as loading user-defined content from a database).
+If the controller component does not contain a function named after the requested view, the framework will fire the onMissingControllerFunction handler to load a view to handle the error.  The template loaded can be found in "/app/templates/error/MissingControllerFunction.cfm". The onMissingControllerFunction function can be overridden in the controller object to perform custom functionality (such as loading user-defined content from a database).
 
 
 Parameters
@@ -67,7 +65,7 @@ When merging the URL and FORM scopes into request.parameters; the URL scope over
 
 Configuration
 -------------
-Configuration files are stored in the "/lib/config" directory.
+Configuration files are stored in the "/app/configs" directory.
 The files are formatted in JSON, with a *.json file extension.
 The application will auto-load any JSON file in that directory.
 To reference a config setting, call "config.get( _setting_, _config (optional)_ )".
@@ -77,7 +75,9 @@ The name of the config is determined by the file name (for example, settings in 
 
 Object Caching
 --------------
-Any object found in either "/lib/com/model" or "/lib/com/service" will automatically be loaded into an appropriate ObjectFactory and cached in memory.
+Any subdirectory found in "/app/lib" containing objects will automatically be loaded into an appropriate ObjectFactory and cached in memory.
+The library is named after the subdirectory name.
+Any additional subdirectories are used as part of the object's classpath.
 How the object is loaded can be configured as an attribute on the component.
 
 * *scope*
@@ -98,6 +98,10 @@ How the object is loaded can be configured as an attribute on the component.
 
 Objects can be retreived either by using "spatula.get( _libraryName_, _classpath_ )", or by calling the object factory directly in memory (for example, "application.services.get( _classpath_ )").
 Using "spatula" is preferred, since it will hunt for the appropriate variable scope for you.
+
+For example: "/app/lib/services/Foo.cfc" will be cached in an ObjectFactory named "services" with the classpath of "Foo".
+"/app/lib/services/foo/Bar.cfc" will be cached in an ObjectFactory named "services" with the classpath of "foo.Bar".
+
 
 
 Resetting the Application and Session Variable Scopes
