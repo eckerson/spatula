@@ -1,53 +1,37 @@
 component
 	extends="Base"
 {
+	variables.title = "";
+	variables.template = "Default";
+	variables.display = "Default";
+	variables.format = "html";
+
 	public beans.View function renderView(
 		required String controller,
 		required String view
 	)
 	{
 		var params = {};
-		var title = replace( arguments.view, "_", " ", "all" );
-		var template = "Default";
-		var format = "Default";
 		var viewObject = 0;
+		var content = "";
+
+		variables.title = replace( arguments.view, "_", " ", "all" );
 
 		if ( structKeyExists( this, arguments.view ) )
 		{
 			var controllerFunction = this[ arguments.view ];
 			params = controllerFunction();
-
-			if ( structKeyExists( params, "title" ) &&
-				len( trim( params.title ) ) > 0 )
-			{
-				title = params.title;
-			}
-
-			if ( structKeyExists( params, "template" ) &&
-				len( trim( params.template ) ) )
-			{
-				template = params.template;
-			}
-
-			if ( structKeyExists( params, "format" ) &&
-				len( trim( params.format ) ) )
-			{
-				format = params.format;
-			}
-
-			if ( structKeyExists( request.parameters, "display" ) )
-			{
-				format = request.parameters.display;
-			}
 			
 			var viewPath = "/app/views/" & lcase( arguments.controller ) & "/" & arguments.view & ".cfm";
 			var content = include( template = viewPath, params = params );
 
 			viewObject = createView(
-					title = title,
+					title = variables.title,
 					content = content,
-					template = template,
-					format = format
+					template = variables.template,
+					display = variables.display,
+					format = variables.format,
+					data = params
 				);
 		}
 		else
@@ -69,9 +53,22 @@ component
 	private beans.View function createView(
 		String title,
 		String content,
-		String template
+		String template,
+		String display,
+		String format,
+		Struct data
 	)
 	{
+		if ( structKeyExists( request.parameters, "display" ) )
+		{
+			arguments.display = request.parameters.display;
+		}
+
+		if ( structKeyExists( request.parameters, "format" ) )
+		{
+			arguments.format = request.parameters.format;
+		}
+
 		return createObject( "component", "beans.View" )
 			.init( argumentCollection = arguments );
 	}

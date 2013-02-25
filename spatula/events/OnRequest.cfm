@@ -12,18 +12,28 @@
 
 	if ( isInstanceOf( local.view, "spatula.beans.View" ) )
 	{
-		variables.content = local.view.getFormattedContent();
-		variables.title = local.view.getTitle();
-		if ( len( trim( local.view.getTemplate() ) ) )
+		switch( local.view.getFormat() )
 		{
-			local.template = "/app/templates/" & local.view.getTemplate() & ".cfm";
+			case "json":
+				writeOutput( serializeJSON( local.view.getData() ) );
+				break;
 
-			//Include the template
-			include local.template;
-		}
-		else
-		{
-			writeOutput( variables.content );
+			default:
+				if ( len( trim( local.view.getTemplate() ) ) )
+				{
+					variables.content = local.view.getFormattedContent();
+					variables.title = local.view.getTitle();
+
+					local.template = "/app/templates/" & local.view.getTemplate() & ".cfm";
+
+					//Include the template
+					include local.template;
+				}
+				else
+				{
+					writeOutput( variables.content );
+				}
+				break;
 		}
 	}
 

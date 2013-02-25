@@ -3,8 +3,8 @@ component
 {
 	public Struct function wiki()
 	{
-		return {
-			format = "wiki"
-		};
+		variables.display = "wiki";
+		
+		return {};
 	}
 }

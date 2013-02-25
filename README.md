@@ -112,24 +112,29 @@ For example: "/app/lib/services/Foo.cfc" will be cached in an ObjectFactory name
 
 View Settings
 -------------
-The Struct returned by the controller function can alter how the view is displayed.
-The following settings are available:
+The controller can alter how the view is displayed.
+The following settings are modifiable in the object's variables scope:
 
-* *title*
+* _String_ *variables.title*
 
 	The page title. This can be used in the window title as well as in the page title in the layout (depending on how the layout uses the title).
 
-* *template*
+* _String_ *variables.template*
 
 	The template to wrap the content with. These can be found in "/app/templates".
 
-* *format*
+* _String_ *variables.display*
 
-	Determines if a format parser should be used on the content. By default, no parser is used. If the format is "wiki", the wiki parser is used (see "Index.cfm/Parsing/Wiki" for information on the markup).
+	Determines if a markup parser should be used on the content. By default, no parser is used. If the display is "wiki", the wiki parser is used (see "Index.cfm/Parsing/Wiki" for information on the markup).
 
-Additionally, the view format can be overridden by pasing in a _display_ URL parameter.
+* _String_ *variables.format*
 
-For example, for a page that normally uses the "wiki" format, passing a "display=default" will force the framework to use the default format (which is no parsing).
+	Determines the format to display the controller data. The default value, "html", directs the controller to load the associated template. If the format is "json", the data returned by the controller is returned as a JSON object.
+
+The display and format setting can also be set by passing it in over the URL.
+The URL value is given preference to what is set by the controller (so a function normally renders as HTML, an AJAX request can still call that function and get JSON).
+
+For example, for a page that normally uses the "html" format, passing "format=json" will force the framework to return a JSON object instead of rendering the view.
 
 
 Resetting the Application and Session Variable Scopes
