@@ -1,9 +1,3 @@
-TODOs:
-* nowiki/pre syntax (in progress).
-* Definition lists
-* Get mixed-style lists to create the HTML properly.
-* Fix list nesting to mirror mediawiki's behavior.
-
 == Formatting ==
 === Text Markup ===
 <table border="1" style="width: 100%; border-collapse: collapse;">

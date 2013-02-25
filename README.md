@@ -17,6 +17,13 @@ Things to Do
 * * Look into additional markup support (markdown?).
 * Add additional error handling with view templates (onError, onMissingTemplate, Missing View CFM, etcetera).
 
+Wiki Parser Things to Do
+------------------------
+* nowiki/pre syntax (in progress).
+* Definition lists
+* Get mixed-style lists to create the HTML properly.
+* Fix list nesting to mirror mediawiki's behavior.
+
 
 MVC
 ---
