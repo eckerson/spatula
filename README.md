@@ -23,6 +23,7 @@ Wiki Parser Things to Do
 * Definition lists
 * Get mixed-style lists to create the HTML properly.
 * Fix list nesting to mirror mediawiki's behavior.
+* External links
 
 
 MVC
