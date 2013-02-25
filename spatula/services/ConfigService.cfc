@@ -7,7 +7,7 @@ component
 	//Constructors
 	public ConfigService function init()
 	{
-		variables.configRoot = "/lib/config/";
+		variables.configRoot = "/app/configs/";
 
 		return this;
 	}

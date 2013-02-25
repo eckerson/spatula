@@ -12,7 +12,7 @@ component
 		required String view
 	)
 	{
-		var controllerObject = createObject( "component", "lib.controller." & arguments.controller );
+		var controllerObject = createObject( "component", "app.controllers." & arguments.controller );
 		var viewData = controllerObject.renderView( argumentCollection = arguments );
 
 		return viewData;

@@ -14,7 +14,7 @@
 	{
 		variables.content = local.view.getFormattedContent();
 		variables.title = local.view.getTitle();
-		local.template = "/lib/template/" & local.view.getTemplate() & ".cfm";
+		local.template = "/app/templates/" & local.view.getTemplate() & ".cfm";
 
 		//Include the template
 		include local.template;

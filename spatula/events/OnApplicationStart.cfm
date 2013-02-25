@@ -5,7 +5,7 @@
 	//Create the library configurations
 	spatula.createLibraryConfig(
 		"services,models",
-		"lib.com.service,lib.com.model",
+		"app.com.service,app.com.model",
 		config.get( "DEFAULT_LAZY_LOAD" )
 	);
 

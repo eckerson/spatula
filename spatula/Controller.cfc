@@ -35,7 +35,7 @@ component
 				format = params.format;
 			}
 			
-			var viewPath = "/lib/view/" & lcase( arguments.controller ) & "/" & arguments.view & ".cfm";
+			var viewPath = "/app/views/" & lcase( arguments.controller ) & "/" & arguments.view & ".cfm";
 			var content = include( template = viewPath, params = params );
 
 			viewObject = createView(
@@ -77,7 +77,7 @@ component
 	)
 	{
 		var content = include(
-				template = "/lib/template/error/MissingControllerMethod.cfm",
+				template = "/app/templates/error/MissingControllerMethod.cfm",
 				params = {
 					controller = arguments.controller,
 					view = arguments.view
