@@ -15,6 +15,8 @@
 		switch( local.view.getFormat() )
 		{
 			case "json":
+				getPageContext().getResponse().setContentType( "application/json" );
+
 				writeOutput( serializeJSON( local.view.getData() ) );
 				break;
 
