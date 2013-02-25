@@ -110,6 +110,27 @@ For example: "/app/lib/services/Foo.cfc" will be cached in an ObjectFactory name
 "/app/lib/services/foo/Bar.cfc" will be cached in an ObjectFactory named "services" with the classpath of "foo.Bar".
 
 
+View Settings
+-------------
+The Struct returned by the controller function can alter how the view is displayed.
+The following settings are available:
+
+* *title*
+
+	The page title. This can be used in the window title as well as in the page title in the layout (depending on how the layout uses the title).
+
+* *template*
+
+	The template to wrap the content with. These can be found in "/app/templates".
+
+* *format*
+
+	Determines if a format parser should be used on the content. By default, no parser is used. If the format is "wiki", the wiki parser is used (see "Index.cfm/Parsing/Wiki" for information on the markup).
+
+Additionally, the view format can be overridden by pasing in a _display_ URL parameter.
+
+For example, for a page that normally uses the "wiki" format, passing a "display=default" will force the framework to use the default format (which is no parsing).
+
 
 Resetting the Application and Session Variable Scopes
 -----------------------------------------------------

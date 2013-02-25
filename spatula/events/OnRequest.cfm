@@ -14,10 +14,17 @@
 	{
 		variables.content = local.view.getFormattedContent();
 		variables.title = local.view.getTitle();
-		local.template = "/app/templates/" & local.view.getTemplate() & ".cfm";
+		if ( len( trim( local.view.getTemplate() ) ) )
+		{
+			local.template = "/app/templates/" & local.view.getTemplate() & ".cfm";
 
-		//Include the template
-		include local.template;
+			//Include the template
+			include local.template;
+		}
+		else
+		{
+			writeOutput( variables.content );
+		}
 	}
 
 	//TODO: Make this able to occur as a fallback

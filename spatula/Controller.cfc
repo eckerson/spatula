@@ -34,6 +34,11 @@ component
 			{
 				format = params.format;
 			}
+
+			if ( structKeyExists( request.parameters, "display" ) )
+			{
+				format = request.parameters.display;
+			}
 			
 			var viewPath = "/app/views/" & lcase( arguments.controller ) & "/" & arguments.view & ".cfm";
 			var content = include( template = viewPath, params = params );
