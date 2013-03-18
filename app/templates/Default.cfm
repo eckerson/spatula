@@ -10,7 +10,7 @@
 		<title>#variables.title# | #config.get( "site_name" )#</title>
 	</cfoutput>
 
-	<link rel="stylesheet" type="text/css" href="/lib/css/Application.css" />
+	<link rel="stylesheet" type="text/css" href="/app/css/Application.css" />
 </head>
 <body>
 	<cfoutput>

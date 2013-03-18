@@ -19,9 +19,6 @@ Things to Do
 Wiki Parser Things to Do
 ------------------------
 * nowiki/pre syntax (in progress).
-* Definition lists
-* Get mixed-style lists to create the HTML properly.
-* Fix list nesting to mirror mediawiki's behavior.
 * External links
 
 

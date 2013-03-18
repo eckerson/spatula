@@ -10,8 +10,8 @@ component
 		var formattedText = "";
 		var unformattedTextArray = listToArray( arguments.unformattedText, chr( 10 ), true );
 		var formattedTextArray = [];
-		var listFindRegex = "^[\*##]";
-		var listReplaceRegex = "^([\*##]+)([\s\w\W\S]+)";
+		var listFindRegex = "^[\*##;:]";
+		var listReplaceRegex = "^([\*##;:]+)([\s\w\W\S]+)";
 		var currentLine = "";
 		var previousLine = "";
 		var currentList = [];
@@ -47,9 +47,10 @@ component
 				previousLine = currentLine;
 				if ( reFind( listFindRegex, unformattedTextArray[ i ] ) )
 				{
-					currentLine = "li";
 					previousList = currentList;
 					currentList = listToArray( reReplace( theText, listReplaceRegex, "\1" ), "" );
+
+					currentLine = "li";
 				}
 				else if ( unformattedTextArray[ i ] == "" )
 				{
@@ -100,12 +101,35 @@ component
 									formattedTextArray,
 									decrementListLevel( previousList, arrayLen( currentList ) )
 								);
+							
+							arrayAppend(
+									formattedTextArray,
+									"</" & getListItemType( previousList[ arrayLen( currentList ) ] ) & ">"
+								);
+
+							arrayAppend(
+									formattedTextArray,
+									"<" & getListItemType( currentList[ arrayLen( currentList ) ] ) & ">"
+								);
+						}
+						else
+						{
+							arrayAppend(
+									formattedTextArray,
+									"</" & getListItemType( previousList[ arrayLen( previousList ) ] ) & ">"
+								);
+
+							arrayAppend(
+									formattedTextArray,
+									"<" & getListItemType( currentList[ arrayLen( currentList ) ] ) & ">"
+								);
 						}
 					}
+					
 
 					arrayAppend(
 							formattedTextArray,
-							"<li>" & parse_inlineFormatting( reReplace( theText, listReplaceRegex, "\2" ) ) & "</li>"
+							parse_inlineFormatting( reReplace( theText, listReplaceRegex, "\2" ) )
 						);
 				}
 				else
@@ -124,17 +148,14 @@ component
 
 							previousList = [];
 						}
-						else
+						else if ( previousLine != "" )
 						{
-							if ( previousLine != "" )
-							{
-								arrayAppend( formattedTextArray, "</" & previousLine & ">" );
-							}
+							arrayAppend( formattedTextArray, "</" & previousLine & ">" );
+						}
 
-							if ( currentLine != "" )
-							{
-								arrayAppend( formattedTextArray, "<" & currentLine & ">" );
-							}
+						if ( currentLine != "" )
+						{
+							arrayAppend( formattedTextArray, "<" & currentLine & ">" );
 						}
 					}
 
@@ -163,7 +184,7 @@ component
 		{
 			arrayAppend( formattedTextArray, "</" & currentLine & ">" );
 		}
-
+//writeDump( formattedTextArray );
 		formattedText = arrayToList( formattedTextArray, chr( 10 ) );
 		return formattedText;
 	}
@@ -222,9 +243,35 @@ component
 			case "##":
 				listType = "ol";
 				break;
+
+			case ";": case ":":
+				listType = "dl";
+				break;
 		}
 
 		return listType;
+	}
+
+	private String function getListItemType( required String maskCharacter )
+	{
+		var listItemType = "";
+
+		switch( arguments.maskCharacter )
+		{
+			case ";":
+				listItemType = "dt";
+				break;
+
+			case ":":
+				listItemType = "dd";
+				break;
+
+			default:
+				listItemType = "li";
+				break;
+		}
+
+		return listItemType;
 	}
 
 	private String function incrementListLevel(
@@ -234,17 +281,19 @@ component
 	{
 		var listString = "";
 		var listType = "";
+		var listItemType = "";
 
 		for ( var i = arguments.startIndex; i <= arrayLen( arguments.listArray ); i++ )
 		{
 			listType = getListType( arguments.listArray[ i ] );
+			listItemType = getListItemType( arguments.listArray[ i ] );
 
-			if ( i != 1 )
+			/*if ( i != 1 )
 			{
 				listString &= "<li>";
-			}
+			}*/
 
-			listString &= "<" & listType & ">";
+			listString &= "<" & listType & "><" & listItemType & ">";
 		}
 
 		return listString;
@@ -257,16 +306,18 @@ component
 	{
 		var listString = "";
 		var listType = "";
+		var listITemType = "";
 
 		for ( var i = arrayLen( arguments.listArray ); i > arguments.endIndex; i-- )
 		{
-			listType = getListType( arguments.listArray[ i ] );			
-			listString &= "</" & listType & ">";
+			listType = getListType( arguments.listArray[ i ] );		
+			listItemType = getListItemType( arguments.listArray[ i ] )	;
+			listString &= "</" & listItemType & "></" & listType & ">";
 
-			if ( i != 1 )
+			/*if ( i != 1 )
 			{
 				listString &= "</li>";
-			}
+			}*/
 		}
 
 		return listString;

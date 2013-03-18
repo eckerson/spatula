@@ -141,6 +141,81 @@ Any other start also
 ends the list.
 			</td>
 		</tr>
+		<tr>
+			<td>Definition List</td>
+			<td>
+<pre>
+;item 1
+: definition 1
+;item 2
+: definition 2-1
+: definition 2-2
+</pre>
+			</td>
+			<td>
+;item 1
+: definition 1
+;item 2
+: definition 2-1
+: definition 2-2
+			</td>
+		</tr>
+		<tr>
+			<td>Indent Text</td>
+			<td>
+<pre>
+: Single indent
+:: Double indent
+::::: Multiple indent
+</pre>
+			</td>
+			<td>
+: Single indent
+:: Double indent
+::::: Multiple indent
+			</td>
+		</tr>
+		<tr>
+			<td>Mixture of different types of list</td>
+			<td>
+<pre>
+# one
+# two
+#* two point one
+#* two point two
+# three
+#; three item one
+#: three def one
+# four
+#: four def one
+#: this looks like a continuation
+#: and is often used
+#: instead<br />of &lt;br /&gt;
+# five
+## five sub 1
+### five sub 1 sub 1
+## five sub 2
+</pre>
+			</td>
+			<td>
+# one
+# two
+#* two point one
+#* two point two
+# three
+#; three item one
+#: three def one
+# four
+#: four def one
+#: this looks like a continuation
+#: and is often used
+#: instead<br />of &lt;br /&gt;
+# five
+## five sub 1
+### five sub 1 sub 1
+## five sub 2
+			</td>
+		</tr>
 	</tbody>
 </table>
 
