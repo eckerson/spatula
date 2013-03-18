@@ -1,0 +1,17 @@
+{
+	"CURRENT_ENVIRONMENT" : "DEVELOPMENT",
+
+	"DEVELOPMENT" : {
+		"ERROR_HANDLING" : {
+			"SHOW_ERRORS" : true,
+			"SHOW_FULL_OBJECT" : true
+		}
+	},
+
+	"PRODUCTION" : {
+		"ERROR_HANDLING" : {
+			"SHOW_ERRORS" : false,
+			"SHOW_FULL_OBJECT" : false
+		}
+	}
+}

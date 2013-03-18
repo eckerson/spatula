@@ -43,12 +43,12 @@ component
 		include "events/OnSessionEnd.cfm";
 	}
 
-	/*public Boolean function onMissingTemplate( String targetPage )
+	public Boolean function onMissingTemplate( String targetPage )
 	{
 		include "events/OnMissingTemplate.cfm";
 
 		return true;
-	}*/
+	}
 
 	public void function onError( exception, eventName )
 	{

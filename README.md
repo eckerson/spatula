@@ -15,7 +15,6 @@ Things to Do
 * Add markup parsing support.
 * * Add wiki markup support (in progress).
 * * Look into additional markup support (markdown?).
-* Add additional error handling with view templates (onError, onMissingTemplate, Missing View CFM, etcetera).
 
 Wiki Parser Things to Do
 ------------------------
