@@ -93,7 +93,7 @@ Text below
 * with an asterisk (*).
 ** More asterisks gives deeper
 *** and deeper levels.
-* Line breaks<br />don't break levels.
+* Line breaks&lt;br /&gt;don't break levels.
 *** But jumping levels creates empty space.
 Any other start ends the list.
 </pre>
@@ -117,7 +117,7 @@ Any other start ends the list.
 ## More number signs gives deeper
 ### and deeper
 ### levels.
-# Line breaks<br />don't break levels.
+# Line breaks&lt;br /&gt;don't break levels.
 ### But jumping levels creates empty space.
 # Blank lines
 
@@ -190,7 +190,7 @@ ends the list.
 #: four def one
 #: this looks like a continuation
 #: and is often used
-#: instead<br />of &lt;br /&gt;
+#: instead&lt;br /&gt;of &lt;br /&gt;
 # five
 ## five sub 1
 ### five sub 1 sub 1
