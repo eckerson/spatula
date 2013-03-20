@@ -463,6 +463,7 @@ component
 		var formattedText = arguments.unformattedText;
 
 		formattedText = parse_internalLinks( formattedText );
+		formattedText = parse_externalLinks( formattedText );
 
 		return formattedText;
 	}
@@ -584,6 +585,116 @@ component
 		{
 			//Another link exists in the string, parse it
 			formattedText = parse_internalLinks( formattedText );
+		}
+
+		return formattedText;
+	}
+
+	private String function parse_externalLinks(
+		required String unformattedText
+	)
+	{
+		var formattedText = arguments.unformattedText;
+		var bracketPattern = "\[((http://|https://)[\w\-\.]+)(\?[\w\=\%\&]+)?( [\S ]+)?\]";
+		var mailtoPattern = "\[((mailto:)[\w\.\!\##\$\%\&\'\*\+\-\/\=\?\^\_\`\{\|\}\~]+@[\w\-\.]+)(\?[\w\=\%\&]+)?( [\S ]+)?\]";
+		var simplePattern = "((http://|https://)[\w\-\.]+)(\?[\w\=\%\&]+)?";
+		var wikiLink = "";
+		var uri = "";
+		var queryString = "";
+		var label = "";
+		var foundBracketLink = reFindNoCase( bracketPattern, formattedText, 0, true );
+		var foundMailtoLink = reFindNoCase( mailtoPattern, formattedText, 0, true );
+		var foundSimpleLink = reFindNoCase( simplePattern, formattedText, 0, true );
+		var htmlLink = "";
+
+		if ( foundBracketLink.pos[ 1 ] > 0 )
+		{
+			/*
+			 * Parse bracket pattern
+			 *
+			 * Position 1 is the wiki link
+			 * Position 2 is the uri
+			 * Position 3 is the protocol
+			 * Position 4 is the query string
+			 * Position 5 is label with leading space (trim before use)
+			 */
+			wikiLink = mid( formattedText, foundBracketLink.pos[ 1 ], foundBracketLink.len[ 1 ] );
+			uri = mid( formattedText, foundBracketLink.pos[ 2 ], foundBracketLink.len[ 2 ] );
+
+			if ( foundBracketLink.pos[ 4 ] > 0 )
+			{
+				queryString = mid( formattedText, foundBracketLink.pos[ 4 ], foundBracketLink.len[ 4 ] );
+			}
+
+			if ( foundBracketLink.pos[ 5 ] > 0 )
+			{
+				label = mid( formattedText, foundBracketLink.pos[ 5 ], foundBracketLink.len[ 5 ] );
+			}
+		}
+		else if ( foundMailtoLink.pos[ 1 ] > 0 )
+		{
+			/*
+			 * Parse mailto links
+			 *
+			 * Position 1 is the wiki link
+			 * Position 2 is the uri
+			 * Position 3 is the protocol
+			 * Position 4 is the query string
+			 * Position 5 is label with leading space (trim before use)
+			 */
+			wikiLink = mid( formattedText, foundMailtoLink.pos[ 1 ], foundMailtoLink.len[ 1 ] );
+			uri = mid( formattedText, foundMailtoLink.pos[ 2 ], foundMailtoLink.len[ 2 ] );
+
+			if ( foundMailtoLink.pos[ 4 ] > 0 )
+			{
+				queryString = mid( formattedText, foundMailtoLink.pos[ 4 ], foundMailtoLink.len[ 4 ] );
+			}
+
+			if ( foundMailtoLink.pos[ 5 ] > 0 )
+			{
+				label = mid( formattedText, foundMailtoLink.pos[ 5 ], foundMailtoLink.len[ 5 ] );
+			}
+		}
+		else if ( foundSimpleLink.pos[ 1 ] > 0 )
+		{
+			/*
+			 * Parse simple links
+			 *
+			 * Position 1 is the wiki link
+			 * Position 2 is the uri
+			 * Position 3 is the protocol
+			 * Position 4 is the query string
+			 */
+			wikiLink = mid( formattedText, foundSimpleLink.pos[ 1 ], foundSimpleLink.len[ 1 ] );
+			uri = mid( formattedText, foundSimpleLink.pos[ 2 ], foundSimpleLink.len[ 2 ] );
+
+			if ( foundSimpleLink.pos[ 4 ] > 0 )
+			{
+				queryString = mid( formattedText, foundSimpleLink.pos[ 4 ], foundSimpleLink.len[ 4 ] );
+			}
+		}
+
+		uri = trim( uri );
+		queryString = trim( queryString );
+		label = trim( label );
+
+		if ( len( uri ) )
+		{
+			if ( !len( label ) )
+			{
+				label = uri;
+			}
+
+			//Build the HTML link
+			htmlLink = '<a href="' & uri & queryString & '">' & label & '</a>';
+
+			formattedText = replace( formattedText, wikiLink, htmlLink );
+		}
+
+		if ( reFindNoCase( bracketPattern, formattedText, 0, false ) )
+		{
+			//Another link exists in the string, parse it
+			formattedText = parse_externalLinks( formattedText );
 		}
 
 		return formattedText;

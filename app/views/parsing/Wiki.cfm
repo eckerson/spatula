@@ -324,3 +324,45 @@ and markup is _ignored_.
 		</tr>
 	</tbody>
 </table>
+
+=== External Links ===
+<table border="1" style="width: 100%; border-collapse: collapse;">
+	<col span="3" width="33%" />
+	<thead>
+		<tr>
+			<th>Description</th>
+			<th>Markup</th>
+			<th>Output</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>External link</td>
+			<td>
+				<pre>http://google.com</pre>
+			</td>
+			<td>http://google.com</td>
+		</tr>
+		<tr>
+			<td>External link with different label</td>
+			<td>
+				<pre>[http://google.com Google]</pre>
+			</td>
+			<td>[http://google.com Google]</td>
+		</tr>
+		<tr>
+			<td>Mailto link</td>
+			<td>
+				<pre>[mailto:info@example.org email me]</pre>
+			</td>
+			<td>[mailto:info@example.org email me]</td>
+		</tr>
+		<tr>
+			<td>Mailto named with subject line and body</td>
+			<td>
+				<pre>[mailto:info@example.org?Subject=URL%20Encoded%20Subject&body=Body%20Text info]</pre>
+			</td>
+			<td>[mailto:info@example.org?Subject=URL%20Encoded%20Subject&body=Body%20Text info]</td>
+		</tr>
+	</tbody>
+</table>

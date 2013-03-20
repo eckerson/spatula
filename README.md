@@ -19,7 +19,6 @@ Things to Do
 Wiki Parser Things to Do
 ------------------------
 * nowiki/pre syntax (in progress).
-* External links
 
 
 MVC
