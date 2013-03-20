@@ -576,7 +576,7 @@ component
 			}
 
 			//Build the HTML link
-			htmlLink = '<a href="/Index.cfm/' & formattedLinkPage & '">' & linkLabel & '</a>';
+			htmlLink = '<a href="/Index.cfm/' & formattedLinkPage & '" class="internal-link">' & linkLabel & '</a>';
 
 			formattedText = replace( formattedText, wikiLink, htmlLink );
 		}
@@ -686,7 +686,7 @@ component
 			}
 
 			//Build the HTML link
-			htmlLink = '<a href="' & uri & queryString & '">' & label & '</a>';
+			htmlLink = '<a href="' & uri & queryString & '" class="external-link">' & label & '</a>';
 
 			formattedText = replace( formattedText, wikiLink, htmlLink );
 		}
