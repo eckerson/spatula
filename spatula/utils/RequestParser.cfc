@@ -140,7 +140,8 @@ component
 				parsedPath.view = thisParam[ 2 ];
 			}
 		}
-		else if ( arrayLen( arguments.pathInfo ) > 0 )
+		else if ( arrayLen( arguments.pathInfo ) > 0 &&
+			"/" & arguments.pathInfo[ 1 ] != arguments.cgiScope.script_name ) //Windows Servers append the script_name to the pathInfo
 		{
 			parsedPath.controller = variables.defaultController;
 			parsedPath.view = arguments.pathInfo[ 1 ];
@@ -164,7 +165,8 @@ component
 			parsedPath.controller = arguments.pathInfo[ 1 ];
 			parsedPath.view = arguments.pathInfo[ 2 ];
 		}
-		else if ( arrayLen( arguments.pathInfo ) == 1 )
+		else if ( arrayLen( arguments.pathInfo ) == 1 &&
+			"/" & arguments.pathInfo[ 1 ] != arguments.cgiScope.script_name ) //Windows Servers append the script_name to the pathInfo
 		{
 			parsedPath.controller = arguments.pathInfo[ 1 ];
 			parsedPath.view = variables.defaultView;
