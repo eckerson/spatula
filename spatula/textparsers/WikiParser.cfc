@@ -38,9 +38,6 @@ component
 				//Handle block formatting
 				theText = parse_blockFormatting( theText );
 
-				//Handle link formatting
-				theText = parse_linkFormatting( theText );
-
 				isBlock = isBlockTag( theText );
 
 				//Determine what block formatting to use for the line
@@ -127,10 +124,7 @@ component
 					}
 					
 
-					arrayAppend(
-							formattedTextArray,
-							parse_inlineFormatting( reReplace( theText, listReplaceRegex, "\2" ) )
-						);
+					theText = reReplace( theText, listReplaceRegex, "\2" );
 				}
 				else
 				{
@@ -158,14 +152,13 @@ component
 							arrayAppend( formattedTextArray, "<" & currentLine & ">" );
 						}
 					}
-
-					arrayAppend( formattedTextArray, parse_inlineFormatting( theText ) );
 				}
+
+				//Handle formatting the line of text
+				theText = parse_line( theText );
 			}
-			else
-			{
-				arrayAppend( formattedTextArray, theText );
-			}
+
+			arrayAppend( formattedTextArray, theText );
 
 			if ( reFindNoCase( "<\/pre", trim( theText ), 1, false ) )
 			{
@@ -321,6 +314,206 @@ component
 		}
 
 		return listString;
+	}
+
+	private String function parse_line(
+		required String unformattedText
+	)
+	{
+		var formattedText = "";
+		var fullNoWikiRegex = "";
+		var openNoWikiRegex = "<nowiki>";
+		var closeNoWikiRegex = "</nowiki>";
+		var selfNoWikiRegex = "<nowiki ?/>";
+		var noWikiRegex = "</?nowiki ?/?>";
+		var foundFullNoWiki = "";
+		var foundOpenNoWiki = reFindNoCase( openNoWikiRegex, arguments.unformattedText, 1, true );
+		var foundCloseNoWiki = reFindNoCase( closeNoWikiRegex, arguments.unformattedText, 1, true );
+
+		//writeDump( foundOpenNoWiki );
+
+		var foundNoWiki = 0;
+		var allFoundNoWikis = [];
+		var i = 1;
+		var textArray = [];
+		var textStart = 1;
+		var textLength = 0;
+		var canFormat = true;
+		var foundSelfNoWiki = 0;
+
+		while ( reFindNoCase( noWikiRegex, arguments.unformattedText, i, false ) > 0 )
+		{
+			foundNoWiki = reFindNoCase( noWikiRegex, arguments.unformattedText, i, true );
+
+			arrayAppend(
+					allFoundNoWikis,
+					{
+						"tag" = mid( arguments.unformattedText, foundNoWiki.pos[ 1 ], foundNoWiki.len[ 1 ] ),
+						"pos" = foundNoWiki.pos[ 1 ],
+						"len" = foundNoWiki.len[ 1 ],
+						"tag_type" = ""
+					}
+				);
+
+			if ( reFindNoCase( openNoWikiRegex, allFoundNoWikis[ arrayLen( allFoundNoWikis ) ][ "tag" ], 1, false ) > 0 )
+			{
+				//Tag is an open tag
+				allFoundNoWikis[ arrayLen( allFoundNoWikis ) ][ "tag_type" ] = "open";
+			}
+			else if ( reFindNoCase( closeNoWikiRegex, allFoundNoWikis[ arrayLen( allFoundNoWikis ) ][ "tag" ], 1, false ) > 0 )
+			{
+				//Tag is a close tag
+				allFoundNoWikis[ arrayLen( allFoundNoWikis ) ][ "tag_type" ] = "close";
+			}
+			else if ( reFindNoCase( selfNoWikiRegex, allFoundNoWikis[ arrayLen( allFoundNoWikis ) ][ "tag" ], 1, false ) > 0 )
+			{
+				//Tag is a self tag
+				allFoundNoWikis[ arrayLen( allFoundNoWikis ) ][ "tag_type" ] = "self";
+			}
+
+			//allFoundNoWikis[ arrayLen( allFoundNoWikis ) ][ "tagType" ]
+
+			i = foundNoWiki.pos[ 1 ] + foundNoWiki.len[ 1 ];
+		}
+
+		if ( arrayLen( allFoundNoWikis ) )
+		{
+			for ( i = 1; i <= arrayLen( allFoundNoWikis ); i++ )
+			{
+				textLength = allFoundNoWikis[ i ].pos - textStart;
+
+				if ( i == 1 )
+				{
+					switch ( allFoundNoWikis[ i ][ "tag_type" ] )
+					{
+						case "open": case "self":
+							canFormat = true;
+							break;
+						
+						case "close":
+							canFormat = false;
+							break;
+					}
+				}
+				else
+				{
+					switch ( allFoundNoWikis[ i - 1 ][ "tag_type" ] )
+					{
+						case "open":
+							canFormat = false;
+							break;
+						
+						case "close":
+							canFormat = true;
+							break;
+
+						case "self":
+							foundSelfNoWiki = reFindNoCase( "([^\s]+)", arguments.unformattedText, textStart, true );
+
+							if ( foundSelfNoWiki.pos[ 1 ] > 0 )
+							{
+								textLength = foundSelfNoWiki.len[ 1 ];
+
+								arrayAppend(
+										textArray,
+										{
+											"canFormat" = false,
+											"text" = mid( arguments.unformattedText, textStart, textLength )
+										}
+									);
+
+								textStart += textLength;
+								textLength = allFoundNoWikis[ i ].pos - textStart;
+							}
+
+							doFormat = true;
+							break;
+					}
+				}
+
+				arrayAppend(
+						textArray,
+						{
+							"canFormat" = canFormat,
+							"text" = mid( arguments.unformattedText, textStart, textLength )
+						}
+					);
+
+				textStart += textLength + allFoundNoWikis[ i ].len;
+			}
+
+			if ( textStart <= len( arguments.unformattedText ) )
+			{
+				textLength = len( arguments.unformattedText ) - textStart + 1;
+
+				switch ( allFoundNoWikis[ arrayLen( allFoundNoWikis ) ][ "tag_type" ] )
+				{
+					case "open":
+						canFormat = false;
+						break;
+					
+					case "close":
+						canFormat = true;
+						break;
+
+					case "self":
+						foundSelfNoWiki = reFindNoCase( "([^\s]+)", arguments.unformattedText, textStart, true );
+
+						if ( foundSelfNoWiki.pos[ 1 ] > 0 )
+						{
+							textLength = foundSelfNoWiki.len[ 1 ];
+
+							arrayAppend(
+									textArray,
+									{
+										"canFormat" = false,
+										"text" = mid( arguments.unformattedText, textStart, textLength )
+									}
+								);
+
+							textStart += textLength;
+							textLength = len( arguments.unformattedText ) - textStart + 1;
+						}
+						doFormat = true;
+						break;
+				}
+
+				arrayAppend(
+						textArray,
+						{
+							"canFormat" = canFormat,
+							"text" = mid( arguments.unformattedText, textStart, textLength )
+						}
+					);
+
+			}
+		}
+		else
+		{
+			arrayAppend(
+					textArray,
+					{
+						"canFormat" = true,
+						"text" = arguments.unformattedText
+					}
+				);
+		}
+
+		for ( i = 1; i <= arrayLen( textArray ); i++ )
+		{
+			if ( textArray[ i ].canFormat )
+			{
+				//Handle link formatting
+				textArray[ i ].text = parse_linkFormatting( textArray[ i ].text );
+
+				//Handle inline formatting
+				textArray[ i ].text = parse_inlineFormatting( textArray[ i ].text );
+			}
+
+			formattedText &= textArray[ i ].text;
+		}
+
+		return formattedText;
 	}
 
 	/*

@@ -13,12 +13,7 @@ Things to Do
 ------------
 * Review setting organization (use sub-objects or split into separate configs).
 * Add markup parsing support.
-* * Add wiki markup support (in progress).
 * * Look into additional markup support (markdown?).
-
-Wiki Parser Things to Do
-------------------------
-* nowiki/pre syntax (in progress).
 
 
 MVC

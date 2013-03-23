@@ -44,19 +44,21 @@ However, if you start a line with an asterisk, it will create a bullet list.
 			</td>
 			<td>_*Strong Emphasis*_</td>
 		</tr>
-	</tbody>
-	<!--tbody>
 		<tr>
-			<th colspan="3">Preformatted</th>
-		</tr>
-		<tr>
-			<td>Ignore Wiki markup</td>
+			<td>Escape Wiki Markup</td>
 			<td>
-				<pre>&lt;nowiki>Markup is *ignored*&lt;/nowiki></pre>
+				<pre>&lt;nowiki&gt;no _markup_ &lt;/nowiki&gt;</pre>
 			</td>
-			<td><nowiki>Markup is *ignored*</nowiki></td>
+			<td><nowiki>no _markup_</nowiki></td>
 		</tr>
-	</tbody-->
+		<tr>
+			<td>Escape Wiki Markup Once</td>
+			<td>
+				<pre>*Markup* &lt;nowiki /&gt;*Escaped* *Markup*</pre>
+			</td>
+			<td>*Markup* <nowiki />*Escaped* *Markup*</td>
+		</tr>
+	</tbody>
 	<tbody>
 		<tr>
 			<th colspan="3">Section formatting - only at the beginning of the line</th>
