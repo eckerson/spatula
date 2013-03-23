@@ -4,7 +4,7 @@
 
 	//Create the library configurations
 	spatula.createLibraryConfig(
-		config.get( "DEFAULT_LAZY_LOAD" )
+		config.get( "OBJECT_CACHING.DEFAULT_LAZY_LOAD", "Framework" )
 	);
 
 	//Create the object factories

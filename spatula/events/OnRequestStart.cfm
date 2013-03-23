@@ -20,9 +20,9 @@
 	//Parse the request variables
 	createObject( "component", "spatula.utils.RequestParser" )
 		.init(
-			controllerStyle = config.get( "CONTROLLER_STYLE" ),
-			defaultController = config.get( "DEFAULT_CONTROLLER" ),
-			defaultView = config.get( "DEFAULT_VIEW" )
+			controllerStyle = config.get( "MVC.CONTROLLER_STYLE", "Framework" ),
+			defaultController = config.get( "MVC.DEFAULT_CONTROLLER", "Framework" ),
+			defaultView = config.get( "MVC.DEFAULT_VIEW", "Framework" )
 		)
 		.parseRequest( cgi, url, form );
 

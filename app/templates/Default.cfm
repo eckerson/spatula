@@ -7,7 +7,7 @@
 <html>
 <head>
 	<cfoutput>
-		<title>#variables.title# | #config.get( "site_name" )#</title>
+		<title>#variables.title# | #config.get( "site_name", "Labels" )#</title>
 	</cfoutput>
 
 	<link rel="stylesheet" type="text/css" href="/app/css/Application.css" />

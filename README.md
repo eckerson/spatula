@@ -9,16 +9,15 @@ The purpose of this framework is to allow the application to serve up content wi
 * Support for markup parsing for views.
 
 
-Things to Do
+Things to Do (Future Versions)
 ------------
-* Review setting organization (use sub-objects or split into separate configs).
-* Add markup parsing support.
-* * Look into additional markup support (markdown?).
+* i18n support.
+* Look into additional markup support (markdown?).
 
 
 MVC
 ---
-There are currently two supported styles for making requests (determined by the _CONTROLLER_STYLE_ config setting):
+There are currently two supported styles for making requests (determined by the _MVC.CONTROLLER_STYLE_ framework config setting):
 
 * *wiki*
 
@@ -36,7 +35,7 @@ There are currently two supported styles for making requests (determined by the 
 	For example, if the URL is "website.com/Index.cfm/foo", the application will use the _foo_ controller and assume the default view.
 	This is done to be consistent with standard MVC URL parsing.
 
-The default controller and view to use when one or both are not specified are determined by the _DEFAULT_CONTROLLER_ and _DEFAULT_VIEW_ config settings.
+The default controller and view to use when one or both are not specified are determined by the _MVC.DEFAULT_CONTROLLER_ and _MVC.DEFAULT_VIEW_ framework config settings.
 
 * The request controller determines the controller object and the view folder.
 * The request view determines the controller function and the view file.
@@ -92,7 +91,7 @@ How the object is loaded can be configured as an attribute on the component.
 
 * *lazyLoad*
 
-	Determines if the object should be cached when it's first requested ("true") or on application-start ("false"). The default for this setting is determined by the _DEFAULT_LAZY_LOAD_ setting.
+	Determines if the object should be cached when it's first requested ("true") or on application-start ("false"). The default for this setting is determined by the _OBJECT_CACHING.DEFAULT_LAZY_LOAD_ framework setting.
 
 Objects can be retreived either by using "spatula.get( _libraryName_, _classpath_ )", or by calling the object factory directly in memory (for example, "application.services.get( _classpath_ )").
 Using "spatula" is preferred, since it will hunt for the appropriate variable scope for you.

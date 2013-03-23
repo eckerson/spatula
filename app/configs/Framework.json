@@ -1,0 +1,11 @@
+{
+	"MVC" : {
+		"CONTROLLER_STYLE" : "default",
+		"DEFAULT_CONTROLLER" : "Main",
+		"DEFAULT_VIEW" : "Home"
+	},
+
+	"OBJECT_CACHING" : {
+		"DEFAULT_LAZY_LOAD" : true
+	}
+}
