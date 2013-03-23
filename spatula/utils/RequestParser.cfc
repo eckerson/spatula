@@ -71,11 +71,11 @@ component
 		//Get the controller and view from the path info
 		if ( variables.controllerStyle == "wiki" )
 		{
-			parsedPath = parseWikiPath( pathInfo );
+			parsedPath = parseWikiPath( pathInfo, arguments.cgiScope );
 		}
 		else
 		{
-			parsedPath = parseDefaultPath( pathInfo );
+			parsedPath = parseDefaultPath( pathInfo, arguments.cgiScope );
 		}
 		
 		if ( parsedPath.controller == "" &&
@@ -114,7 +114,8 @@ component
 	}
 
 	private Struct function parseWikiPath(
-		required Array pathInfo
+		required Array pathInfo,
+		required Struct cgiScope
 	)
 	{
 		var parsedPath = {
@@ -151,7 +152,8 @@ component
 	}
 
 	private Struct function parseDefaultPath(
-		required Array pathInfo
+		required Array pathInfo,
+		required Struct cgiScope
 	)
 	{
 		var parsedPath = {
