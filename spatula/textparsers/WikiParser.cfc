@@ -803,7 +803,6 @@ component
 
 		if ( foundBracketLink.pos[ 1 ] > 0 )
 		{
-			writeDump(foundBracketLink);
 			/*
 			 * Parse bracket pattern
 			 *
