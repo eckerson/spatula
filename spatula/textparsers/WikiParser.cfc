@@ -8,7 +8,7 @@ component
 	)
 	{
 		var formattedText = "";
-		var unformattedTextArray = listToArray( arguments.unformattedText, chr( 10 ), true );
+		var unformattedTextArray = listToArray( arguments.unformattedText, createObject( "java", "java.lang.System" ).getProperty("line.separator"), true );
 		var formattedTextArray = [];
 		var listFindRegex = "^[\*##;:]";
 		var listReplaceRegex = "^([\*##;:]+)([\s\w\W\S]+)";
