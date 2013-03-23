@@ -788,11 +788,12 @@ component
 	)
 	{
 		var formattedText = arguments.unformattedText;
-		var bracketPattern = "\[((http://|https://)[\w\-\.]+)(\?[\w\=\%\&]+)?( [\S ]+)?\]";
+		var bracketPattern = "\[((http://|https://)[\w\-\.]+)([\/\w\-\.]+)?(\?[\w\=\%\&]+)?( [\S ]+)?\]";
 		var mailtoPattern = "\[((mailto:)[\w\.\!\##\$\%\&\'\*\+\-\/\=\?\^\_\`\{\|\}\~]+@[\w\-\.]+)(\?[\w\=\%\&]+)?( [\S ]+)?\]";
-		var simplePattern = "((http://|https://)[\w\-\.]+)(\?[\w\=\%\&]+)?";
+		var simplePattern = "((http://|https://)[\w\-\.]+)([\/\w\-\.]+)?(\?[\w\=\%\&]+)?";
 		var wikiLink = "";
 		var uri = "";
+		var folderStructure = "";
 		var queryString = "";
 		var label = "";
 		var foundBracketLink = reFindNoCase( bracketPattern, formattedText, 0, true );
@@ -802,26 +803,33 @@ component
 
 		if ( foundBracketLink.pos[ 1 ] > 0 )
 		{
+			writeDump(foundBracketLink);
 			/*
 			 * Parse bracket pattern
 			 *
 			 * Position 1 is the wiki link
 			 * Position 2 is the uri
 			 * Position 3 is the protocol
-			 * Position 4 is the query string
-			 * Position 5 is label with leading space (trim before use)
+			 * Position 4 is the folder structure
+			 * Position 5 is the query string
+			 * Position 6 is label with leading space (trim before use)
 			 */
 			wikiLink = mid( formattedText, foundBracketLink.pos[ 1 ], foundBracketLink.len[ 1 ] );
 			uri = mid( formattedText, foundBracketLink.pos[ 2 ], foundBracketLink.len[ 2 ] );
 
 			if ( foundBracketLink.pos[ 4 ] > 0 )
 			{
-				queryString = mid( formattedText, foundBracketLink.pos[ 4 ], foundBracketLink.len[ 4 ] );
+				folderStructure = mid( formattedText, foundBracketLink.pos[ 4 ], foundBracketLink.len[ 4 ] );
 			}
 
 			if ( foundBracketLink.pos[ 5 ] > 0 )
 			{
-				label = mid( formattedText, foundBracketLink.pos[ 5 ], foundBracketLink.len[ 5 ] );
+				queryString = mid( formattedText, foundBracketLink.pos[ 5 ], foundBracketLink.len[ 5 ] );
+			}
+
+			if ( foundBracketLink.pos[ 6 ] > 0 )
+			{
+				label = mid( formattedText, foundBracketLink.pos[ 6 ], foundBracketLink.len[ 6 ] );
 			}
 		}
 		else if ( foundMailtoLink.pos[ 1 ] > 0 )
@@ -856,18 +864,25 @@ component
 			 * Position 1 is the wiki link
 			 * Position 2 is the uri
 			 * Position 3 is the protocol
-			 * Position 4 is the query string
+			 * Position 4 is the folder structure
+			 * Position 5 is the query string
 			 */
 			wikiLink = mid( formattedText, foundSimpleLink.pos[ 1 ], foundSimpleLink.len[ 1 ] );
 			uri = mid( formattedText, foundSimpleLink.pos[ 2 ], foundSimpleLink.len[ 2 ] );
 
 			if ( foundSimpleLink.pos[ 4 ] > 0 )
 			{
-				queryString = mid( formattedText, foundSimpleLink.pos[ 4 ], foundSimpleLink.len[ 4 ] );
+				folderStructure = mid( formattedText, foundSimpleLink.pos[ 4 ], foundSimpleLink.len[ 4 ] );
+			}
+
+			if ( foundSimpleLink.pos[ 5 ] > 0 )
+			{
+				queryString = mid( formattedText, foundSimpleLink.pos[ 5 ], foundSimpleLink.len[ 5 ] );
 			}
 		}
 
 		uri = trim( uri );
+		folderStructure = trim( folderStructure );
 		queryString = trim( queryString );
 		label = trim( label );
 
@@ -875,11 +890,11 @@ component
 		{
 			if ( !len( label ) )
 			{
-				label = uri;
+				label = uri & folderStructure;
 			}
 
 			//Build the HTML link
-			htmlLink = '<a href="' & uri & queryString & '" class="external-link">' & label & '</a>';
+			htmlLink = '<a href="' & uri & folderStructure & queryString & '" class="external-link">' & label & '</a>';
 
 			formattedText = replace( formattedText, wikiLink, htmlLink );
 		}
