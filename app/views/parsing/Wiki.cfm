@@ -6,7 +6,7 @@ To tell the framework to use the wiki text parser for a page, set _variables.dis
 == Formatting ==
 Text formatting is done using normal characters such as asterisks, underscores, or equal signs.
 The usage can vary depending on their position.
-For example, to format a word in *bold*, you include it in two pairs of asterisks.
+For example, to format a word in *bold*, you wrap it in asterisks.
 However, if you start a line with an asterisk, it will create a bullet list.
 
 === Text Markup ===
