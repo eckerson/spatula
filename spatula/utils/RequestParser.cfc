@@ -37,12 +37,40 @@ component
 		);
 	}
 
+	/*
+	 * This function removes the script_name from the beginning of the path_info.
+	 * This is necessary for Windows Servers, which can include that information
+	 * in the path_info, even though the framework doesn't need it there.
+	 **/
+	private String function cleanPathInfo(
+		required Struct cgiScope
+	)
+	{
+		var pathInfo = arguments.cgiScope[ "path_info" ];
+		var scriptName = arguments.cgiScope[ "script_name" ];
+
+		pathInfo = reReplaceNoCase( pathInfo, "^" & scriptName, "", "one" );
+
+		return pathInfo;
+	}
+
 	private void function parseURI(
 		required Struct cgiScope
 	)
 	{
+		var pathInfo = cleanPathInfo( cgiScope = arguments.cgiScope );
 		var URI = "http://" & arguments.cgiScope[ "server_name" ] & arguments.cgiScope[ "script_name" ];
-		var fullURI = URI & arguments.cgiScope[ "path_info" ] & arguments.cgiScope[ "query_string" ];
+		var fullURI = URI;
+
+		if ( len( pathInfo ) )
+		{
+			fullURI &= pathInfo;
+		}
+
+		if ( len( arguments.cgiScope[ "query_string" ] ) )
+		{
+			fullURI &= "?" & arguments.cgiScope[ "query_string" ];
+		}
 
 		request.URI = URI;
 		request.fullURI = fullURI;
@@ -63,7 +91,7 @@ component
 	)
 	{
 		var configService = createObject( "component", "spatula.services.ConfigService" ).init();
-		var pathInfo = listToArray( arguments.cgiScope[ "path_info" ], "/" );
+		var pathInfo = listToArray( cleanPathInfo( cgiScope = arguments.cgiScope ), "/" );
 		var parameters = {};
 		var thisParam = 0;
 		var parsedPath = {};
@@ -77,7 +105,7 @@ component
 		{
 			parsedPath = parseDefaultPath( pathInfo, arguments.cgiScope );
 		}
-		
+
 		if ( parsedPath.controller == "" &&
 			parsedPath.view == "" )
 		{
