@@ -22,21 +22,46 @@ component
 			var controllerFunction = this[ arguments.view ];
 			params = controllerFunction();
 
-			var viewPath = "/app/views/" & lcase( arguments.controller ) & "/" & arguments.view & ".cfm";
-
-			if ( !len( trim( variables.content ) ) )
+			// Handle non-Struct data types for params.
+			if ( isNull( params ) )
 			{
-				variables.content = include( template = viewPath, params = params );
+				// Function returned void
+				params = {};
+			}
+			else if ( isSimpleValue( params ) ||
+				isObject( params ) ||
+				!isStruct( params ) )
+			{
+				// Function returned a simple value, object, or non-Struct.
+				params = {
+					"data" = params
+				};
 			}
 
-			viewObject = createView(
-					title = variables.title,
-					content = variables.content,
-					template = variables.template,
-					display = variables.display,
-					format = variables.format,
-					data = params
-				);
+			if ( isInstanceOf( params.data, "beans.View" ) )
+			{
+				// The object returned from the function is a View object.
+				viewObject = params.data;
+			}
+			else
+			{
+				// Load the view template and create the View object.
+				var viewPath = "/app/views/" & lcase( arguments.controller ) & "/" & arguments.view & ".cfm";
+
+				if ( !len( trim( variables.content ) ) )
+				{
+					variables.content = include( template = viewPath, params = params );
+				}
+
+				viewObject = createView(
+						title = variables.title,
+						content = variables.content,
+						template = variables.template,
+						display = variables.display,
+						format = variables.format,
+						data = params
+					);
+			}
 		}
 		else
 		{
