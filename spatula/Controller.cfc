@@ -2,6 +2,7 @@ component
 	extends="Base"
 {
 	variables.title = "";
+	variables.content = "";
 	variables.template = "Default";
 	variables.display = "Default";
 	variables.format = "html";
@@ -13,7 +14,6 @@ component
 	{
 		var params = {};
 		var viewObject = 0;
-		var content = "";
 
 		variables.title = replace( arguments.view, "_", " ", "all" );
 
@@ -21,13 +21,17 @@ component
 		{
 			var controllerFunction = this[ arguments.view ];
 			params = controllerFunction();
-			
+
 			var viewPath = "/app/views/" & lcase( arguments.controller ) & "/" & arguments.view & ".cfm";
-			var content = include( template = viewPath, params = params );
+
+			if ( !len( trim( variables.content ) ) )
+			{
+				variables.content = include( template = viewPath, params = params );
+			}
 
 			viewObject = createView(
 					title = variables.title,
-					content = content,
+					content = variables.content,
 					template = variables.template,
 					display = variables.display,
 					format = variables.format,
