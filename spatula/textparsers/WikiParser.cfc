@@ -98,7 +98,7 @@ component
 									formattedTextArray,
 									decrementListLevel( previousList, arrayLen( currentList ) )
 								);
-							
+
 							arrayAppend(
 									formattedTextArray,
 									"</" & getListItemType( previousList[ arrayLen( currentList ) ] ) & ">"
@@ -122,7 +122,7 @@ component
 								);
 						}
 					}
-					
+
 
 					theText = reReplace( theText, listReplaceRegex, "\2" );
 				}
@@ -303,7 +303,7 @@ component
 
 		for ( var i = arrayLen( arguments.listArray ); i > arguments.endIndex; i-- )
 		{
-			listType = getListType( arguments.listArray[ i ] );		
+			listType = getListType( arguments.listArray[ i ] );
 			listItemType = getListItemType( arguments.listArray[ i ] )	;
 			listString &= "</" & listItemType & "></" & listType & ">";
 
@@ -389,7 +389,7 @@ component
 						case "open": case "self":
 							canFormat = true;
 							break;
-						
+
 						case "close":
 							canFormat = false;
 							break;
@@ -402,7 +402,7 @@ component
 						case "open":
 							canFormat = false;
 							break;
-						
+
 						case "close":
 							canFormat = true;
 							break;
@@ -451,7 +451,7 @@ component
 					case "open":
 						canFormat = false;
 						break;
-					
+
 					case "close":
 						canFormat = true;
 						break;
@@ -517,20 +517,20 @@ component
 	}
 
 	/*
-	#### ##    ## ##       #### ##    ## ########                                              
-	 ##  ###   ## ##        ##  ###   ## ##                                                    
-	 ##  ####  ## ##        ##  ####  ## ##                                                    
-	 ##  ## ## ## ##        ##  ## ## ## ######                                                
-	 ##  ##  #### ##        ##  ##  #### ##                                                    
-	 ##  ##   ### ##        ##  ##   ### ##                                                    
-	#### ##    ## ######## #### ##    ## ########                                              
-	########  #######  ########  ##     ##    ###    ######## ######## #### ##    ##  ######   
-	##       ##     ## ##     ## ###   ###   ## ##      ##       ##     ##  ###   ## ##    ##  
-	##       ##     ## ##     ## #### ####  ##   ##     ##       ##     ##  ####  ## ##        
-	######   ##     ## ########  ## ### ## ##     ##    ##       ##     ##  ## ## ## ##   #### 
-	##       ##     ## ##   ##   ##     ## #########    ##       ##     ##  ##  #### ##    ##  
-	##       ##     ## ##    ##  ##     ## ##     ##    ##       ##     ##  ##   ### ##    ##  
-	##        #######  ##     ## ##     ## ##     ##    ##       ##    #### ##    ##  ######   
+	#### ##    ## ##       #### ##    ## ########
+	 ##  ###   ## ##        ##  ###   ## ##
+	 ##  ####  ## ##        ##  ####  ## ##
+	 ##  ## ## ## ##        ##  ## ## ## ######
+	 ##  ##  #### ##        ##  ##  #### ##
+	 ##  ##   ### ##        ##  ##   ### ##
+	#### ##    ## ######## #### ##    ## ########
+	########  #######  ########  ##     ##    ###    ######## ######## #### ##    ##  ######
+	##       ##     ## ##     ## ###   ###   ## ##      ##       ##     ##  ###   ## ##    ##
+	##       ##     ## ##     ## #### ####  ##   ##     ##       ##     ##  ####  ## ##
+	######   ##     ## ########  ## ### ## ##     ##    ##       ##     ##  ## ## ## ##   ####
+	##       ##     ## ##   ##   ##     ## #########    ##       ##     ##  ##  #### ##    ##
+	##       ##     ## ##    ##  ##     ## ##     ##    ##       ##     ##  ##   ### ##    ##
+	##        #######  ##     ## ##     ## ##     ##    ##       ##    #### ##    ##  ######
 	*/
 	public String function parse_inlineFormatting(
 		required String unformattedText
@@ -571,20 +571,20 @@ component
 	}
 
 	/*
-	########  ##        #######   ######  ##    ##                                             
-	##     ## ##       ##     ## ##    ## ##   ##                                              
-	##     ## ##       ##     ## ##       ##  ##                                               
-	########  ##       ##     ## ##       #####                                                
-	##     ## ##       ##     ## ##       ##  ##                                               
-	##     ## ##       ##     ## ##    ## ##   ##                                              
-	########  ########  #######   ######  ##    ##                                             
-	########  #######  ########  ##     ##    ###    ######## ######## #### ##    ##  ######   
-	##       ##     ## ##     ## ###   ###   ## ##      ##       ##     ##  ###   ## ##    ##  
-	##       ##     ## ##     ## #### ####  ##   ##     ##       ##     ##  ####  ## ##        
-	######   ##     ## ########  ## ### ## ##     ##    ##       ##     ##  ## ## ## ##   #### 
-	##       ##     ## ##   ##   ##     ## #########    ##       ##     ##  ##  #### ##    ##  
-	##       ##     ## ##    ##  ##     ## ##     ##    ##       ##     ##  ##   ### ##    ##  
-	##        #######  ##     ## ##     ## ##     ##    ##       ##    #### ##    ##  ######   
+	########  ##        #######   ######  ##    ##
+	##     ## ##       ##     ## ##    ## ##   ##
+	##     ## ##       ##     ## ##       ##  ##
+	########  ##       ##     ## ##       #####
+	##     ## ##       ##     ## ##       ##  ##
+	##     ## ##       ##     ## ##    ## ##   ##
+	########  ########  #######   ######  ##    ##
+	########  #######  ########  ##     ##    ###    ######## ######## #### ##    ##  ######
+	##       ##     ## ##     ## ###   ###   ## ##      ##       ##     ##  ###   ## ##    ##
+	##       ##     ## ##     ## #### ####  ##   ##     ##       ##     ##  ####  ## ##
+	######   ##     ## ########  ## ### ## ##     ##    ##       ##     ##  ## ## ## ##   ####
+	##       ##     ## ##   ##   ##     ## #########    ##       ##     ##  ##  #### ##    ##
+	##       ##     ## ##    ##  ##     ## ##     ##    ##       ##     ##  ##   ### ##    ##
+	##        #######  ##     ## ##     ## ##     ##    ##       ##    #### ##    ##  ######
 	*/
 	public String function parse_blockFormatting(
 		required String unformattedText
@@ -634,20 +634,20 @@ component
 	}
 
 	/*
-	##       #### ##    ## ##    ##                                                            
-	##        ##  ###   ## ##   ##                                                             
-	##        ##  ####  ## ##  ##                                                              
-	##        ##  ## ## ## #####                                                               
-	##        ##  ##  #### ##  ##                                                              
-	##        ##  ##   ### ##   ##                                                             
-	######## #### ##    ## ##    ##                                                            
-	########  #######  ########  ##     ##    ###    ######## ######## #### ##    ##  ######   
-	##       ##     ## ##     ## ###   ###   ## ##      ##       ##     ##  ###   ## ##    ##  
-	##       ##     ## ##     ## #### ####  ##   ##     ##       ##     ##  ####  ## ##        
-	######   ##     ## ########  ## ### ## ##     ##    ##       ##     ##  ## ## ## ##   #### 
-	##       ##     ## ##   ##   ##     ## #########    ##       ##     ##  ##  #### ##    ##  
-	##       ##     ## ##    ##  ##     ## ##     ##    ##       ##     ##  ##   ### ##    ##  
-	##        #######  ##     ## ##     ## ##     ##    ##       ##    #### ##    ##  ######   
+	##       #### ##    ## ##    ##
+	##        ##  ###   ## ##   ##
+	##        ##  ####  ## ##  ##
+	##        ##  ## ## ## #####
+	##        ##  ##  #### ##  ##
+	##        ##  ##   ### ##   ##
+	######## #### ##    ## ##    ##
+	########  #######  ########  ##     ##    ###    ######## ######## #### ##    ##  ######
+	##       ##     ## ##     ## ###   ###   ## ##      ##       ##     ##  ###   ## ##    ##
+	##       ##     ## ##     ## #### ####  ##   ##     ##       ##     ##  ####  ## ##
+	######   ##     ## ########  ## ### ## ##     ##    ##       ##     ##  ## ## ## ##   ####
+	##       ##     ## ##   ##   ##     ## #########    ##       ##     ##  ##  #### ##    ##
+	##       ##     ## ##    ##  ##     ## ##     ##    ##       ##     ##  ##   ### ##    ##
+	##        #######  ##     ## ##     ## ##     ##    ##       ##    #### ##    ##  ######
 	*/
 	public String function parse_LinkFormatting(
 		required String unformattedText
@@ -667,6 +667,7 @@ component
 	{
 		var formattedText = arguments.unformattedText;
 		var controllerStyle = variables.controllerStyle;
+		var controllerDelimiter = variables.controllerDelimiter;
 		var defaultController = variables.defaultController;
 		var defaultView = variables.defaultView;
 		var pattern = "\[\[(.*?)\]\]((?:<nowiki(?: ){0,1}(?:\/){0,1}>)|[\w]*)";
@@ -735,27 +736,15 @@ component
 			var formattedLinkPage = "";
 			var linkPageArray = listToArray( linkPage, ":", true );
 
-			switch ( controllerStyle )
+			if ( arrayLen( linkPageArray ) == 1 )
 			{
-				case "wiki":
-					formattedLinkPage = linkPage;
-					break;
-
-				default:
-					if ( arrayLen( linkPageArray ) == 1 )
-					{
-						formattedLinkPage = defaultController & "/" & linkPageArray[ 1 ];
-					}
-					else if ( arrayLen( linkPageArray ) > 1 &&
-						len( trim( linkPageArray[ 2 ] ) ) )
-					{
-						formattedLinkPage = linkPageArray[ 1 ] & "/" & linkPageArray[ 2 ];
-					}
-					else
-					{
-						formattedLinkPage = linkPageArray[ 1 ] & "/" & defaultView;
-					}
-					break;
+				formattedLinkPage = linkPageArray[ 1 ];
+			}
+			else if ( arrayLen( linkPageArray ) > 1 )
+			{
+				formattedLinkPage = ( len( trim( linkPageArray[ 1 ] ) ) ? linkPageArray[ 1 ] : defaultController );
+				formattedLinkPage &= controllerDelimiter;
+				formattedLinkPage &= ( len( trim( linkPageArray[ 2 ] ) ) ? linkPageArray[ 2 ] : defaultView );
 			}
 
 			//Make page for link URL-safe (replace spaces with underscores)

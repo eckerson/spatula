@@ -1,6 +1,7 @@
 {
 	"MVC" : {
 		"CONTROLLER_STYLE" : "default",
+		"CONTROLLER_DELIMITER" : "/",
 		"DEFAULT_CONTROLLER" : "Main",
 		"DEFAULT_VIEW" : "Home"
 	},

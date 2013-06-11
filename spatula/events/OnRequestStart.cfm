@@ -21,6 +21,7 @@
 	createObject( "component", "spatula.utils.RequestParser" )
 		.init(
 			controllerStyle = config.get( "MVC.CONTROLLER_STYLE", "Framework" ),
+			controllerDelimiter = config.get( "MVC.CONTROLLER_DELIMITER", "Framework" ),
 			defaultController = config.get( "MVC.DEFAULT_CONTROLLER", "Framework" ),
 			defaultView = config.get( "MVC.DEFAULT_VIEW", "Framework" )
 		)

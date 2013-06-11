@@ -3,17 +3,20 @@ component
 {
 	//Properties
 	property type="String" name="controllerStyle";
+	property type="String" name="controllerDelimiter";
 	property type="String" name="defaultController";
 	property type="String" name="defaultView";
 
 	//Constructors
 	public RequestParser function init(
 		String controllerStyle = "default",
+		String controllerDelimiter = "/",
 		String defaultController = "Main",
 		String defaultView = "Home"
 	)
 	{
 		variables.controllerStyle = arguments.controllerStyle;
+		variables.controllerDelimiter = arguments.controllerDelimiter;
 		variables.defaultController = arguments.defaultController;
 		variables.defaultView = arguments.defaultView;
 
@@ -94,16 +97,79 @@ component
 		var pathInfo = listToArray( cleanPathInfo( cgiScope = arguments.cgiScope ), "/" );
 		var parameters = {};
 		var thisParam = 0;
-		var parsedPath = {};
+		var parsedPath = {
+			controller = "",
+			view = "",
+			parameterStartIndex = 1
+		};
 
 		//Get the controller and view from the path info
-		if ( variables.controllerStyle == "wiki" )
+		if ( variables.controllerDelimiter == "/" )
 		{
-			parsedPath = parseWikiPath( pathInfo, arguments.cgiScope );
+			/*
+			 * Because the delimiter is the same as the directory delimiter,
+			 * The framework needs to use the first two array positions for the
+			 * controller and view.
+			 **/
+			parsedPath.parameterStartIndex = 3;
+
+			if ( arrayLen( pathInfo ) >= 2 )
+			{
+				parsedPath.controller = pathInfo[ 1 ];
+				parsedPath.view = pathInfo[ 2 ];
+			}
+			else if ( arrayLen( pathInfo ) == 1 )
+			{
+				if ( variables.controllerStyle == "wiki" )
+				{
+					parsedPath.controller = variables.defaultController;
+					parsedPath.view = pathInfo[ 1 ];
+				}
+				else
+				{
+					parsedPath.controller = pathInfo[ 1 ];
+					parsedPath.view = variables.defaultView;
+				}
+			}
 		}
 		else
 		{
-			parsedPath = parseDefaultPath( pathInfo, arguments.cgiScope );
+			/*
+			 * Any other character used as a delimiter will be contained in
+			 * the first position of the path_info.
+			 **/
+			var parsedPath.parameterStartIndex = 2;
+
+			if ( arrayLen( pathInfo ) > 0 &&
+				find( variables.controllerDelimiter , pathInfo[ 1 ] ) )
+			{
+				var thisParam = listToArray( pathInfo[ 1 ], variables.controllerDelimiter, true );
+
+				if ( arrayLen( thisParam ) > 0 &&
+					len( trim( thisParam[ 1 ] ) ) > 0 )
+				{
+					parsedPath.controller = thisParam[ 1 ];
+				}
+
+				if ( arrayLen( thisParam ) > 1 &&
+					len( trim( thisParam[ 2 ] ) ) > 0 )
+				{
+					parsedPath.view = thisParam[ 2 ];
+				}
+			}
+			else if ( arrayLen( pathInfo ) > 0 )
+			{
+				if ( variables.controllerStyle == "wiki" )
+				{
+					parsedPath.controller = variables.defaultController;
+					parsedPath.view = pathInfo[ 1 ];
+				}
+				else
+				{
+					parsedPath.controller = pathInfo[ 1 ];
+					parsedPath.view = variables.defaultView;
+				}
+			}
 		}
 
 		if ( parsedPath.controller == "" &&
@@ -141,70 +207,6 @@ component
 		request.view = parsedPath.view;
 	}
 
-	private Struct function parseWikiPath(
-		required Array pathInfo,
-		required Struct cgiScope
-	)
-	{
-		var parsedPath = {
-			controller = "",
-			view = "",
-			parameterStartIndex = 2
-		};
-
-		if ( arrayLen( arguments.pathInfo ) > 0 &&
-			find( ":" , arguments.pathInfo[ 1 ]) )
-		{
-			var thisParam = listToArray( arguments.pathInfo[ 1 ], ":", true );
-
-			if ( arrayLen( thisParam ) > 0 &&
-				len( trim( thisParam[ 1 ] ) ) > 0 )
-			{
-				parsedPath.controller = thisParam[ 1 ];
-			}
-
-			if ( arrayLen( thisParam ) > 1 &&
-				len( trim( thisParam[ 2 ] ) ) > 0 )
-			{
-				parsedPath.view = thisParam[ 2 ];
-			}
-		}
-		else if ( arrayLen( arguments.pathInfo ) > 0 &&
-			"/" & arguments.pathInfo[ 1 ] != arguments.cgiScope.script_name ) //Windows Servers append the script_name to the pathInfo
-		{
-			parsedPath.controller = variables.defaultController;
-			parsedPath.view = arguments.pathInfo[ 1 ];
-		}
-
-		return parsedPath;
-	}
-
-	private Struct function parseDefaultPath(
-		required Array pathInfo,
-		required Struct cgiScope
-	)
-	{
-		var parsedPath = {
-			controller = "",
-			view = "",
-			parameterStartIndex = 3
-		};
-
-		if ( arrayLen( arguments.pathInfo ) >= 2 )
-		{
-			parsedPath.controller = arguments.pathInfo[ 1 ];
-			parsedPath.view = arguments.pathInfo[ 2 ];
-		}
-		else if ( arrayLen( arguments.pathInfo ) == 1 &&
-			"/" & arguments.pathInfo[ 1 ] != arguments.cgiScope.script_name ) //Windows Servers append the script_name to the pathInfo
-		{
-			parsedPath.controller = arguments.pathInfo[ 1 ];
-			parsedPath.view = variables.defaultView;
-		}
-
-		return parsedPath;
-	}
-
 	private void function redirectToPage(
 		required String controller,
 		required String view,
@@ -217,7 +219,7 @@ component
 		{
 			if ( len( trim( arguments.controller ) ) )
 			{
-				locationURL &= arguments.controller & ":";
+				locationURL &= arguments.controller & variables.controllerDelimiter;
 			}
 
 			locationURL &= arguments.view;
@@ -228,7 +230,7 @@ component
 
 			if ( len( trim( arguments.view ) ) )
 			{
-				locationURL &= "/" & arguments.view;
+				locationURL &= variables.controllerDelimiter & arguments.view;
 			}
 		}
 
