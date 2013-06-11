@@ -38,7 +38,8 @@ component
 				};
 			}
 
-			if ( isInstanceOf( params.data, "beans.View" ) )
+			if ( structKeyExists( params, "data" ) &&
+				isInstanceOf( params.data, "beans.View" ) )
 			{
 				// The object returned from the function is a View object.
 				viewObject = params.data;
